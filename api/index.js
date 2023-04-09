@@ -1,0 +1,668 @@
+const { log } = require('console');
+const express = require('express');
+const app = express();
+const http = require('http');
+const { emit } = require('process');
+const { start } = require('repl');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
+
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/page/index.html');
+});
+app.get('/gameOnline', (req, res) => {
+  start()
+  res.sendFile(__dirname + '/page/gameOnline.html');
+});
+server.listen(3000, () => {
+  console.log('listening on *:3000');
+});
+var p = 10;
+
+
+
+const cards = [
+  {
+    cod: "B+4",
+    color: "#0f0f0f",
+    number: "M4",
+  },
+  {
+    cod: "B+4",
+    color: "#0f0f0f",
+    number: "M4",
+  },
+  {
+    cod: "B+4",
+    color: "#0f0f0f",
+    number: "M4",
+  },
+  {
+    cod: "B+4",
+    color: "#0f0f0f",
+    number: "M4",
+  },
+  {
+    cod: "R+2",
+    color: "#d60b11",
+    number: "M2",
+  },
+  {
+    cod: "R1",
+    color: "#d60b11",
+    number: 1,
+  },
+  {
+    cod: "BlockR",
+    color: "#d60b11",
+    number: "@",
+  },
+  {
+    cod: "R2",
+    color: "#d60b11",
+    number: 2,
+  },
+  {
+    cod: "R3",
+    color: "#d60b11",
+    number: 3,
+  },
+  {
+    cod: "R4",
+    color: "#d60b11",
+    number: 4,
+  },
+  {
+    cod: "R5",
+    color: "#d60b11",
+    number: 5,
+  },
+  {
+    cod: "R6",
+    color: "#d60b11",
+    number: 6,
+  },
+  {
+    cod: "R7",
+    color: "#d60b11",
+    number: 7,
+  },
+  {
+    cod: "R8",
+    color: "#d60b11",
+    number: 8,
+  },
+  {
+    cod: "R9",
+    color: "#d60b11",
+    number: 9,
+  },
+  {
+    cod: "G1",
+    color: "#67bd42",
+    number: 1,
+  },
+  {
+    cod: "BlockG",
+    color: "#67bd42",
+    number: "@",
+  },
+  {
+    cod: "G+2",
+    color: "#67bd42",
+    number: "M2",
+  },
+  {
+    cod: "G2",
+    color: "#67bd42",
+    number: 2,
+  },
+  {
+    cod: "G3",
+    color: "#67bd42",
+    number: 3,
+  },
+  {
+    cod: "G4",
+    color: "#67bd42",
+    number: 4,
+  },
+  {
+    cod: "G5",
+    color: "#67bd42",
+    number: 5,
+  },
+  {
+    cod: "G6",
+    color: "#67bd42",
+    number: 6,
+  },
+  {
+    cod: "G7",
+    color: "#67bd42",
+    number: 7,
+  },
+  {
+    cod: "G8",
+    color: "#67bd42",
+    number: 8,
+  },
+  {
+    cod: "G9",
+    color: "#67bd42",
+    number: 9,
+  },
+  {
+    cod: "B1",
+    color: "#133fc2",
+    number: 1,
+  },
+  {
+    cod: "BlockB",
+    color: "#133fc2",
+    number: "@",
+  },
+  {
+    cod: "B+2",
+    color: "#133fc2",
+    number: "M2",
+  },
+  {
+    cod: "B2",
+    color: "#133fc2",
+    number: 2,
+  },
+  {
+    cod: "B3",
+    color: "#133fc2",
+    number: 3,
+  },
+  {
+    cod: "B4",
+    color: "#133fc2",
+    number: 4,
+  },
+  {
+    cod: "B5",
+    color: "#133fc2",
+    number: 5,
+  },
+  {
+    cod: "B6",
+    color: "#133fc2",
+    number: 6,
+  },
+  {
+    cod: "B7",
+    color: "#133fc2",
+    number: 7,
+  },
+  {
+    cod: "B8",
+    color: "#133fc2",
+    number: 8,
+  },
+  {
+    cod: "B9",
+    color: "#133fc2",
+    number: 9,
+  },
+  {
+    cod: "Y1",
+    color: "#f7f01e",
+    number: 1,
+  },
+  {
+    cod: "BlockY",
+    color: "#f7f01e",
+    number: "@",
+  },
+  {
+    cod: "Y+2",
+    color: "#f7f01e",
+    number: "M2",
+  },
+  {
+    cod: "Y1",
+    color: "#f7f01e",
+    number: 2,
+  },
+  {
+    cod: "Y3",
+    color: "#f7f01e",
+    number: 3,
+  },
+  {
+    cod: "Y4",
+    color: "#f7f01e",
+    number: 4,
+  },
+  {
+    cod: "Y5",
+    color: "#f7f01e",
+    number: 5,
+  },
+  {
+    cod: "Y6",
+    color: "#f7f01e",
+    number: 6,
+  },
+  {
+    cod: "Y7",
+    color: "#f7f01e",
+    number: 7,
+  },
+  {
+    cod: "Y8",
+    color: "#f7f01e",
+    number: 8,
+  },
+  {
+    cod: "Y9",
+    color: "#f7f01e",
+    number: 9,
+  },
+  {
+    cod: "Joker",
+    color: "#0f0f0f",
+    number: "()",
+  },
+  {
+    cod: "Joker",
+    color: "#0f0f0f",
+    number: "()",
+  },
+  {
+    cod: "Joker",
+    color: "#0f0f0f",
+    number: "()",
+  },
+  {
+    cod: "Joker",
+    color: "#0f0f0f",
+    number: "()",
+  },
+];
+const jokerCard = { cod: "Joker", number: "X" }
+
+var scramble = new Array();
+scramble.length = 7;
+var scramble2 = new Array();
+scramble2.length = 7;
+var pileStart;
+var pile;
+var game = new Array();
+game.length = 1000;
+
+var pull = new Array();
+pull.length = 500;
+
+var lastColor = "";
+var lastNumber;
+
+var validation = false;
+
+var turn = 1;
+
+var idPlayer
+idPlayer = 0
+const pWait = new Array().length = 2;;
+
+
+var roomData;
+var rooms = []
+
+
+
+
+function createGame() {
+
+  var n = Math.floor(Math.random() * cards.length);
+  for (let i = 0; i < game.length; i++) {
+    if (game[i] == null) {
+      game[i] = n;
+    }
+
+    lastColor = cards[n].color;
+    lastNumber = cards[n].number
+
+    pileStart = `
+          <div  style="background-color:${cards[n].color};" class="card" id="${i}" > 
+          <div class="cornerUpDiv">
+          <span id="cornerUp"> ${specialCard(
+      cards[n].number,
+      "u"
+    )}</span> </div> <span> ${specialCard(
+      cards[n].number,
+      "m"
+    )}</span> 
+          <div class="cornerDownDiv">
+          <span id="cornerDown"> ${specialCard(
+      cards[n].number,
+      "d"
+    )}</span></div> 
+          </div>`;
+
+
+
+    break;
+  }
+
+  for (let i = 0; i < scramble2.length; i++) {
+    if (scramble[i] == null) {
+      scramble[i] = Math.floor(Math.random() * cards.length);
+    }
+  }
+  for (let i = 0; i < scramble2.length; i++) {
+    if (scramble2[i] == null) {
+      scramble2[i] = Math.floor(Math.random() * cards.length);
+    }
+  }
+}
+
+
+
+
+
+function specialCard(typeCard, U, player) {
+  var circleMainBlock = `<div class="circleBlock"><div class="diagonal"></div></div>`;
+  var circleUBlock = `<div class="circleUDBlock"><div class="diagonal"></div></div>`;
+  var circleDBlock = `<div class="circleUDBlock"><div class="diagonal"></div></div>`;
+  var circleMain = `<div class="circle"></div>`;
+  var circleU = `<div class="circleUD"></div>`;
+  var circleD = `<div class="circleUD"></div>`;
+
+  if (typeCard == "()") {
+    if (U == "u") {
+      return circleU;
+    }
+    if (U == "d") {
+      return circleD;
+    }
+    if (U == "m") {
+      return circleMain;
+    }
+  }
+
+  if (typeCard == "@") {
+    if (player == 1) {
+      turn = 1
+    }
+    if (player == 2) {
+      turn = 2
+    }
+    if (U == "u") {
+      return circleUBlock;
+    }
+    if (U == "d") {
+      return circleDBlock;
+    }
+    if (U == "m") {
+      return circleMainBlock;
+    }
+  }
+
+  return typeCard;
+}
+
+function addCardsInDeck(deck) {
+  if (deck == 1) {
+    for (let i = 0; i < scramble.length; i++) {
+      if (scramble[i] == null) {
+        scramble[i] = Math.floor(Math.random() * cards.length);
+      }
+    }
+  }
+  if (deck == 2) {
+    for (let i = 0; i < scramble2.length; i++) {
+      if (scramble2[i] == null) {
+        scramble2[i] = Math.floor(Math.random() * cards.length);
+      }
+    }
+  }
+
+}
+
+function verificationCard(scram) {
+  console.log(cards[scram].color);
+  console.log(cards[scram].cod);
+
+  if (cards[scram].color == lastColor) {
+    console.log("True color");
+    validation = true;
+  } else if (cards[scram].number == lastNumber) {
+    validation = true;
+    console.log("True number");
+  } else if (cards[scram].color == "#0f0f0f") {
+    validation = true;
+  }
+
+  return validation;
+}
+
+function joker(color, vf, sc) {
+
+  var pileJ = `
+  <div  style="background-color:${color};" class="card"  > 
+  <div class="cornerUpDiv">
+  <span id="cornerUp"> ${jokerCard.number}</span> </div> <span> ${jokerCard.number}</span> 
+  <div class="cornerDownDiv">
+  <span id="cornerDown"> ${jokerCard.number}</span></div> 
+  </div>`;
+
+  io.emit('escolha', color, vf, sc, pileJ)
+}
+
+function addFourCards(player, id) {
+  if (player == 2) {
+    scramble.length = scramble.length + 4;
+    addCardsInDeck(1)
+  }
+  if (player == 1) {
+    scramble2.length = scramble2.length + 4;
+    addCardsInDeck(2)
+  }
+  joker("#0f0f0f", true, 2)
+
+}
+
+function addTwoCards(player, id) {
+  if (player == 1) {
+    scramble2.length = scramble2.length + 2;
+    addCardsInDeck(2)
+  }
+  if (player == 2) {
+    scramble.length = scramble.length + 2;
+    addCardsInDeck(1)
+  }
+  console.log("turno: " + turn)
+  io.emit('showCard', scramble, scramble2, pile)
+
+}
+
+
+
+
+
+
+
+io.on('connection', (socket) => {
+
+
+  socket.on('start', (salaroom) => {
+
+    roomData = salaroom;
+
+    if (rooms != []) {
+      for (let i = 0; i <= rooms.length; i++) {
+
+
+        if (rooms[i] != salaroom) {
+          socket.leaveAll();
+          console.log("adcionou");
+          rooms.push(roomData)
+          socket.join(salaroom)
+          createGame();
+          io.in(salaroom).emit('start', scramble, scramble2, pileStart, idPlayer)
+          break
+        }
+        else {
+          socket.leaveAll();
+          console.log("entrou");
+          socket.join(salaroom)
+          io.in(salaroom).emit('start', scramble, scramble2, pile, idPlayer)
+          break
+        }
+
+      }
+
+    }
+
+
+
+  })
+
+
+  socket.on("disconnect", (reason) => {
+
+
+    console.log("desconectou  e tem players " + idPlayer);
+
+  });
+
+
+  socket.on('chooseColor', (color, vf, scram) => {
+    lastColor = color;
+    lastNumber = cards[scram].number;
+
+
+
+
+    pile = `
+        <div  style="background-color:${color};" class="card"  > 
+        <div class="cornerUpDiv">
+        <span id="cornerUp"> ${jokerCard.number}</span> </div> <span> ${jokerCard.number}</span> 
+        <div class="cornerDownDiv">
+        <span id="cornerDown"> ${jokerCard.number}</span></div> 
+        </div>`;
+
+    joker(color, vf, scram)
+
+  })
+
+
+  socket.on('push', () => {
+
+    if (turn == 1) {
+
+      scramble.length = scramble.length + 1;
+      addCardsInDeck(1)
+    }
+    if (turn == 2) {
+
+      scramble2.length = scramble2.length + 1;
+      addCardsInDeck(2)
+
+    }
+    console.log("turno: " + turn)
+    io.emit('showCard', scramble, scramble2, pile)
+  })
+
+
+
+
+  socket.on('play', (scram, id, player, sala) => {
+
+    validation = false;
+
+    if (player == turn) {
+
+
+      if (verificationCard(scram) == true) {
+        if (player == 1) {
+          turn = 2
+          socket.emit('turn', "Jogador 2")
+        }
+        if (player == 2) {
+          turn = 1
+          socket.emit('turn', "Jogador 1")
+        }
+        lastColor = cards[scram].color;
+        lastNumber = cards[scram].number;
+
+        for (let i = 0; i < game.length; i++) {
+          if (game[i] == null) {
+            game[i] = scram;
+          }
+
+          if (cards[scram].number == "()") {
+
+            joker("#0f0f0f", true, scram)
+
+          }
+
+          if (cards[scram].number == "M4") {
+            if (player == 1) {
+
+              addFourCards(1, id);
+            }
+            if (player == 2) {
+
+              addFourCards(2, id);
+            }
+          }
+
+          if (cards[scram].number == "M2") {
+            if (player == 1) {
+
+              addTwoCards(1, id);
+            }
+            if (player == 2) {
+
+              addTwoCards(2, id);
+            }
+          }
+
+          pile = `
+          <div  style="background-color:${cards[scram].color
+            };" class="card" id="${i}" > 
+          <div class="cornerUpDiv">
+          <span id="cornerUp">${specialCard(
+              cards[scram].number,
+              "u", player
+            )}</span> </div> <span>${specialCard(
+              cards[scram].number,
+              "m", player
+            )}</span> 
+          <div class="cornerDownDiv">
+          <span id="cornerDown">${specialCard(
+              cards[scram].number,
+              "d", player
+            )}</span></div> 
+          </div> `;
+
+          if (player == 1) {
+            scramble.splice(id, 1);
+          }
+          if (player == 2) {
+            scramble2.splice(id, 1);
+          }
+
+          break;
+        }
+      }
+
+    }
+
+
+
+    console.log("turno: " + turn)
+    io.sockets.to(sala).emit('showCard', scramble, scramble2, pile)
+
+  })
+
+
+});
+
+
