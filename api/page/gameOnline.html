@@ -310,9 +310,8 @@
   </div>
 
 
-  <div class="divCreateRom">
+  <div class="divCreateRom" id="sala">
   
-      <input type="text" placeholder="Name" name="" id="sala" />
     <input type="button" id="btnStart" onClick="startCreate()" value="Create" />
   </div>
 
@@ -607,7 +606,7 @@
    var playerInfo = document.getElementById("id");
 
     function startCreate() {
-      socket.emit('start', room.value,)
+      socket.emit('start', )
     }
 
 

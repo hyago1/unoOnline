@@ -1,25 +1,33 @@
-const { log } = require('console');
+
 const express = require('express');
 const app = express();
 const http = require('http');
-const { emit } = require('process');
-const { start } = require('repl');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
+app.use(express.static('public'))
+app.use(express. urlencoded());
+
+app.use(express.json({ extended: true }));
+
+
+let roomName;
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/page/index.html');
 });
-app.get('/gameOnline', (req, res) => {
-  start()
+app.get('/createRoom', (req, res) => {
+  res.sendFile(__dirname + '/page/createRoom.html');
+});
+app.post('/gameOnline', (req, res) => {
+  roomName = req.body.nomedasala;
+  console.log(roomName);
   res.sendFile(__dirname + '/page/gameOnline.html');
 });
 server.listen(3000, () => {
   console.log('listening on *:3000');
 });
 var p = 10;
-
 
 
 const cards = [
@@ -310,7 +318,6 @@ idPlayer = 0
 const pWait = new Array().length = 2;;
 
 
-var roomData;
 var rooms = []
 
 
@@ -360,9 +367,6 @@ function createGame() {
     }
   }
 }
-
-
-
 
 
 function specialCard(typeCard, U, player) {
@@ -483,35 +487,29 @@ function addTwoCards(player, id) {
 
 
 
-
-
-
-
 io.on('connection', (socket) => {
 
 
-  socket.on('start', (salaroom) => {
+  socket.on('start', () => {
 
-    roomData = salaroom;
+
 
     if (rooms != []) {
       for (let i = 0; i <= rooms.length; i++) {
-
-
-        if (rooms[i] != salaroom) {
+        if (rooms[i] != roomName) {
           socket.leaveAll();
           console.log("adcionou");
-          rooms.push(roomData)
-          socket.join(salaroom)
+          rooms.push(roomName)
+          socket.join(roomName)
           createGame();
-          io.in(salaroom).emit('start', scramble, scramble2, pileStart, idPlayer)
+          io.in(roomName).emit('start', scramble, scramble2, pileStart, idPlayer)
           break
         }
         else {
           socket.leaveAll();
           console.log("entrou");
-          socket.join(salaroom)
-          io.in(salaroom).emit('start', scramble, scramble2, pile, idPlayer)
+          socket.join(roomName)
+          io.in(roomName).emit('start', scramble, scramble2, pile, idPlayer)
           break
         }
 
@@ -572,7 +570,7 @@ io.on('connection', (socket) => {
 
 
 
-  socket.on('play', (scram, id, player, sala) => {
+  socket.on('play', (scram, id, player) => {
 
     validation = false;
 
@@ -658,7 +656,7 @@ io.on('connection', (socket) => {
 
 
     console.log("turno: " + turn)
-    io.sockets.to(sala).emit('showCard', scramble, scramble2, pile)
+    io.sockets.to(roomName).emit('showCard', scramble, scramble2, pile)
 
   })
 

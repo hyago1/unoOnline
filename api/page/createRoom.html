@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="css/styleCreateRoom.css" />
+    <title>Create Room</title>
+</head>
+<style>
+     /* flex, colun, justify center, align center*/
+
+body{
+  background-color:#2e2e2e;
+  margin: 0px;
+  display: flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items: center;
+  height:100vh;
+}
+input, button, .div_createRoom{
+  border-radius:8px;
+  border:none
+}
+ input:focus {
+  
+ box-shadow: 0 0 0 0;
+    outline: 0;
+   
+  }
+
+.div_createRoom{
+  width:10em;
+  padding:20px;
+  background-color:#4a4a4a;
+}
+form{
+  display: flex;
+  flex-direction:column;
+  justify-content:center;
+  width:100%;
+  heigth:100%;
+}
+button{
+  cursor:pointer;
+}
+input ,button{
+      background-color: rgb(94, 94, 94);
+  padding:5px;
+   margin:2px;
+}
+
+
+</style>
+<body>
+      <div class="div_createRoom">
+        <form id="form" method="post" action="/gameOnline">
+        <input type="text" name="nomedasala"   placeholder="Nome da usuario"  id="userName">
+       
+   <button type="submit">Entrar</button>
+        </form>
+      </div>
+    <script src="socket.io/socket.io.js"></script>
+</body>
+</html>
