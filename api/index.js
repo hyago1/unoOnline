@@ -12,7 +12,10 @@ app.use(express. urlencoded());
 app.use(express.json({ extended: true }));
 
 
+let user
 let roomName;
+let users  = new Array();
+users.length = 2
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/page/index.html');
@@ -21,8 +24,21 @@ app.get('/createRoom', (req, res) => {
   res.sendFile(__dirname + '/page/createRoom.html');
 });
 app.post('/gameOnline', (req, res) => {
+
   roomName = req.body.nomedasala;
-  console.log(roomName);
+  user = req.body.nick
+  users.push(user)
+  
+  // for (let i = 0; i < users.length; i++) {
+  //   if (users[i] != user) {
+  //     users[i] = user
+  //     break
+  //       }    
+      
+  //     }
+        console.log(users);
+
+
   res.sendFile(__dirname + '/page/gameOnline.html');
 });
 server.listen(3000, () => {
@@ -293,6 +309,9 @@ const cards = [
     number: "()",
   },
 ];
+
+
+
 const jokerCard = { cod: "Joker", number: "X" }
 
 var scramble = new Array();
@@ -507,26 +526,32 @@ function addTwoCards(player, id) {
 
 
 io.on('connection', (socket) => {
-
+  io.emit('wait' , users )
   pile = pileStart
+  
   socket.on('start', () => {
-
+  
     if (rooms != []) {
       for (let i = 0; i <= rooms.length; i++) {
-        if (rooms[i] != roomName) {
+        if (rooms[i] != roomName) { 
+        
+          user = users[0]
           socket.leaveAll();
           console.log("adcionou");
+          console.log(user);
           rooms.push(roomName)
           socket.join(roomName)
           createGame();
-          io.in(roomName).emit('start', scramble, scramble2, pileStart, idPlayer)
+          io.in(roomName).emit('start', scramble, scramble2, pileStart, user)
+        
           break
         }
         else {
           socket.leaveAll();
-          console.log("entrou");
+          console.log("entrou");      
+          user = users[1]
           socket.join(roomName)
-          io.in(roomName).emit('start', scramble, scramble2, pileStart, idPlayer)
+          io.in(roomName).emit('start', scramble, scramble2, pileStart, user)
           break
         }
 
@@ -535,6 +560,8 @@ io.on('connection', (socket) => {
     }
 
   })
+
+
 
 
   socket.on("disconnect", (reason) => {
@@ -595,7 +622,7 @@ io.on('connection', (socket) => {
 
     }
     console.log("turno: " + turn)
-    io.emit('showCard', scramble, scramble2, pile, turn)
+    io.emit('showCard', scramble, scramble2, pile, user)
   })
 
   socket.on('play', (scram, id, player) => {
@@ -608,11 +635,12 @@ io.on('connection', (socket) => {
       if (verificationCard(scram) == true) {
         if (player == 1) {
           turn = 2
+          user = users[1]
      
         }
         if (player == 2) {
           turn = 1
-         
+          user = users[0]
         }
         lastColor = cards[scram].color;
         lastNumber = cards[scram].number;
@@ -683,8 +711,8 @@ io.on('connection', (socket) => {
 
 
 
-    console.log("turno: " + turn)
-    io.in(roomName).emit('showCard', scramble, scramble2, pile , turn)
+    console.log("turno: " + user)
+    io.in(roomName).emit('showCard', scramble, scramble2, pile , user)
 
   })
 

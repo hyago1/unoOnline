@@ -13,19 +13,21 @@
     body {
       background-color: rgb(20, 20, 20);
     }
-    #btnStart, #sala{
+
+    #btnStart,
+    #sala {
       padding: 15px;
       border: none;
       cursor: pointer;
-    
+
     }
- 
-    .divStartReset{
+
+    .divStartReset {
       width: 90%;
       height: 90%;
- 
+      flex-direction: column;
       position: absolute;
-      display:flex;
+      display: flex;
       justify-content: center;
       align-items: center;
       visibility: visible;
@@ -279,20 +281,41 @@
       overflow-y: hidden;
       max-width: 80%;
     }
-    .playerInfo{
-  position: absolute;
-  padding: 10px;
-  background-color: rgb(77, 77, 77);
-  color: white;
-  right: 10px;
-  bottom: 10px;
-  border-radius: 4px;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
+
+    .playerInfo {
+      position: absolute;
+      padding: 5px;
+      height: auto;
+      width: 10%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: rgb(77, 77, 77);
+      color: rgb(9, 216, 95);
+      right: 10px;
+      bottom: 10px;
+      border-radius: 4px;
+      font-size: 15px;
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
 
     ::-webkit-scrollbar {
       width: 5px;
       background-color: #77777744;
+    }
+
+    .waitPlayer {
+      background-color: rgb(107, 107, 107);
+      width: 15em;
+      height: 20em;
+      border-radius: 8px;
+      margin: 10px;
+
+
+    }
+  #waitList{
+      display: flex;
+      flex-direction: column;
     }
   </style>
 
@@ -305,16 +328,22 @@
   </div>
   <div class="decks">
     <div class="ulDeck">
+
       <ul id="lista"></ul>
     </div>
     <div class="divStartReset" id="sala">
+
       <div>
-      <input type="button" id="btnStart" onClick="startCreate()" value="Start" />
-      <input type="button" id="btnStart" onClick="reset()" value="Reset" />
+        <input type="button" id="btnStart" onClick="startCreate()" value="Pronto" />
+        <input type="button" id="btnStart" onClick="reset()" value="Reset" />
       </div>
-     
+      <div class="waitPlayer">
+        <ul id="waitList">
+        </ul>
+      </div>
+
     </div>
-  
+
     <ul id="game"></ul>
     <div class="ulDeck">
       <ul id="lista2"></ul>
@@ -338,16 +367,20 @@
 
 
 
-   <div class="playerInfo">
-          <span id="id">Player 1</span>
-        </div>
+  <div class="playerInfo">
+    <span id="id">...</span>
+  </div>
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
-    
 
- var socket = io();
-   
+
+    var socket = io();
+
+
+
+
+
 
     const cards = [
       {
@@ -611,35 +644,48 @@
         number: "()",
       },
     ];
-   var room  = document.getElementById('sala')
-   var playerInfo = document.getElementById("id");
-
+    var room = document.getElementById('sala')
+    var playerInfo = document.getElementById("id");
+    var waitList = document.getElementById('waitList')
     function startCreate() {
-      socket.emit('start', )
+      socket.emit('start')
     }
     function reset() {
-      socket.emit('reset', )
+      socket.emit('reset')
     }
 
-socket.on('escolha' ,(color,vf,a3, pile)=>{
 
-  var visible = "visible";
-  var hidden = "hidden";
-  var joker = document.getElementById("joker");
-
-  console.log(color);
-  console.log(vf);
-
-  if (vf) {
-    joker.style.visibility = visible;
-  }else{
-    joker.style.visibility = hidden;
-  }
-
-  game.innerHTML = `${pile}`
+    // socket.on('wait' , (user) =>{
+    //   for (let i = 0; i <= user.length; i++) {
+    //     console.log(user);
+    //     if (user != null) {
+    //       waitList.innerHTML = `<li>${user[i]}</li>`
+        
+    //     }
+        
+    //   }
+    // })
 
 
-      })
+    socket.on('escolha', (color, vf, a3, pile) => {
+
+      var visible = "visible";
+      var hidden = "hidden";
+      var joker = document.getElementById("joker");
+
+      console.log(color);
+      console.log(vf);
+
+      if (vf) {
+        joker.style.visibility = visible;
+      } else {
+        joker.style.visibility = hidden;
+      }
+
+      game.innerHTML = `${pile}`
+
+
+    })
 
 
     function specialCard(typeCard, U, player) {
@@ -683,7 +729,7 @@ socket.on('escolha' ,(color,vf,a3, pile)=>{
       return typeCard;
     }
 
-    socket.on('start', (d1, d2, u, p) => {
+    socket.on('start', (d1, d2, u, p, user) => {
       var startbtn = document.getElementById('btnStart');
       var sala = document.getElementById('sala');
       var game = document.getElementById('game');
@@ -693,13 +739,16 @@ socket.on('escolha' ,(color,vf,a3, pile)=>{
       lista.innerHTML = "";
       game.innerHTML = `${u}`
 
-      
-  var hidden = "hidden";
-  startbtn.style.visibility = hidden;
-  sala.style.visibility = hidden
 
- 
-        for (let i = 0; i < d1.length; i++) {
+      var hidden = "hidden";
+      startbtn.style.visibility = hidden;
+      sala.style.visibility = hidden
+
+      playerInfo.textContent = "Vez de: " + user
+
+
+
+      for (let i = 0; i < d1.length; i++) {
         lista.innerHTML += `<li class="list">
     <div style="background-color:${cards[d1[i]].color
           }" class="card" id="${i}" onClick="playCard(${d1[i]} , ${i} , 1)"> 
@@ -743,41 +792,41 @@ socket.on('escolha' ,(color,vf,a3, pile)=>{
             "d"
           )}</span></div> 
     </div></li>`;
-        
-      
-    }
-   
- 
+
+
+      }
+
+
 
       document.getElementById("lista2").lastChild.scrollIntoView();
       document.getElementById("lista").lastChild.scrollIntoView();
     })
 
-    function chooseColor(color,vf,scram) {
-      socket.emit('chooseColor', color,vf,scram)
+    function chooseColor(color, vf, scram) {
+      socket.emit('chooseColor', color, vf, scram)
     }
 
-    function playCard(scram, id,  player) {
+    function playCard(scram, id, player) {
 
       socket.emit('play', scram, id, player, sala.value)
       console.log(sala.value);
-  
+
 
     }
-  
+
     function push() {
       socket.emit('push')
-      
+
 
     }
 
-    socket.on('showCard' ,(d1,d2,pile,turn) =>{
+    socket.on('showCard', (d1, d2, pile, turn) => {
       var game = document.getElementById('game');
       var lista2 = document.getElementById("lista2");
       lista2.innerHTML = "";
       var lista = document.getElementById("lista");
       lista.innerHTML = "";
-      playerInfo.textContent="Player: "+turn
+      playerInfo.textContent = "Vez de: " + turn
       console.log(pile);
       game.innerHTML = `${pile}`
 
@@ -831,7 +880,7 @@ socket.on('escolha' ,(color,vf,a3, pile)=>{
       }
       document.getElementById("lista2").lastChild.scrollIntoView();
       document.getElementById("lista").lastChild.scrollIntoView();
-    
+
 
     })
 
