@@ -526,7 +526,7 @@ io.on('connection', (socket) => {
           socket.leaveAll();
           console.log("entrou");
           socket.join(roomName)
-          io.in(roomName).emit('start', scramble, scramble2, pile, idPlayer)
+          io.in(roomName).emit('start', scramble, scramble2, pileStart, idPlayer)
           break
         }
 
@@ -559,7 +559,7 @@ io.on('connection', (socket) => {
     pileStart = '' 
     turn = 1
     createGame()
-    io.in(roomName).emit('showCard', scramble, scramble2, pile)
+    io.in(roomName).emit('showCard', scramble, scramble2, pileStart)
   } )
 
   socket.on('chooseColor', (color, vf, scram) => {
@@ -595,7 +595,7 @@ io.on('connection', (socket) => {
 
     }
     console.log("turno: " + turn)
-    io.emit('showCard', scramble, scramble2, pile)
+    io.emit('showCard', scramble, scramble2, pile, turn)
   })
 
   socket.on('play', (scram, id, player) => {

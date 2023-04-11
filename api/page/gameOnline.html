@@ -20,11 +20,16 @@
     
     }
  
-    .divCreateRom{
+    .divStartReset{
+      width: 90%;
+      height: 90%;
+ 
       position: absolute;
-      top: 50%;
-      left: 48%;
+      display:flex;
+      justify-content: center;
+      align-items: center;
       visibility: visible;
+
     }
 
 
@@ -302,6 +307,14 @@
     <div class="ulDeck">
       <ul id="lista"></ul>
     </div>
+    <div class="divStartReset" id="sala">
+      <div>
+      <input type="button" id="btnStart" onClick="startCreate()" value="Start" />
+      <input type="button" id="btnStart" onClick="reset()" value="Reset" />
+      </div>
+     
+    </div>
+  
     <ul id="game"></ul>
     <div class="ulDeck">
       <ul id="lista2"></ul>
@@ -310,10 +323,6 @@
   </div>
 
 
-  <div class="divCreateRom" id="sala">
-    <input type="button" id="btnStart" onClick="startCreate()" value="Start" />
-    <input type="button" id="btnStart" onClick="reset()" value="Reset" />
-  </div>
 
   <div id="joker" class="joker">
     <div class="u">
@@ -616,23 +625,18 @@ socket.on('escolha' ,(color,vf,a3, pile)=>{
 
   var visible = "visible";
   var hidden = "hidden";
-
-
-
   var joker = document.getElementById("joker");
+
   console.log(color);
   console.log(vf);
+
   if (vf) {
     joker.style.visibility = visible;
   }else{
-
     joker.style.visibility = hidden;
   }
 
-
   game.innerHTML = `${pile}`
-
-
 
 
       })
@@ -774,7 +778,7 @@ socket.on('escolha' ,(color,vf,a3, pile)=>{
       var lista = document.getElementById("lista");
       lista.innerHTML = "";
       playerInfo.textContent="Player: "+turn
-
+      console.log(pile);
       game.innerHTML = `${pile}`
 
 
@@ -830,8 +834,6 @@ socket.on('escolha' ,(color,vf,a3, pile)=>{
     
 
     })
-
-
 
   </script>
 
