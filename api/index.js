@@ -1,4 +1,5 @@
 
+const { log } = require('console');
 const express = require('express');
 const app = express();
 const http = require('http');
@@ -298,16 +299,32 @@ var scramble = new Array();
 scramble.length = 7;
 var scramble2 = new Array();
 scramble2.length = 7;
-var pileStart;
+
+var pileStart ='';
 var pile;
+
 var game = new Array();
 game.length = 1000;
-
 var pull = new Array();
 pull.length = 500;
 
-var lastColor = "";
-var lastNumber;
+//Aux's
+var scrambleAux = new Array();
+scrambleAux.length = 7;
+var scramble2Aux = new Array();
+scramble2Aux.length = 7;
+//Aux's
+
+
+//Aux's
+var gameAux = new Array();
+gameAux.length = 1000;
+var pullAux = new Array();
+pullAux.length = 500;
+//Aux's
+
+var lastColor = '';
+var lastNumber = '';
 
 var validation = false;
 
@@ -315,7 +332,6 @@ var turn = 1;
 
 var idPlayer
 idPlayer = 0
-const pWait = new Array().length = 2;;
 
 
 var rooms = []
@@ -334,7 +350,9 @@ function createGame() {
     lastColor = cards[n].color;
     lastNumber = cards[n].number
 
-    pileStart = `
+    if (pileStart == '') {
+      console.log("criou o pile start");
+          pileStart = `
           <div  style="background-color:${cards[n].color};" class="card" id="${i}" > 
           <div class="cornerUpDiv">
           <span id="cornerUp"> ${specialCard(
@@ -351,6 +369,7 @@ function createGame() {
     )}</span></div> 
           </div>`;
 
+    }
 
 
     break;
@@ -455,7 +474,7 @@ function joker(color, vf, sc) {
   <span id="cornerDown"> ${jokerCard.number}</span></div> 
   </div>`;
 
-  io.emit('escolha', color, vf, sc, pileJ)
+  io.in(roomName).emit('escolha', color, vf, sc, pileJ)
 }
 
 function addFourCards(player, id) {
@@ -489,10 +508,8 @@ function addTwoCards(player, id) {
 
 io.on('connection', (socket) => {
 
-
+  pile = pileStart
   socket.on('start', () => {
-
-
 
     if (rooms != []) {
       for (let i = 0; i <= rooms.length; i++) {
@@ -517,18 +534,33 @@ io.on('connection', (socket) => {
 
     }
 
-
-
   })
 
 
   socket.on("disconnect", (reason) => {
 
 
-    console.log("desconectou  e tem players " + idPlayer);
+    console.log("desconectou");
 
   });
 
+  socket.on('reset', () =>{
+    scramble = new Array();
+    scramble.length = 7
+    scramble2 = new Array();
+    scramble2.length = 7
+    game = new Array();
+    game.length = 1000;
+  
+    pull = new Array(); 
+    pull.length = 500;
+    lastColor = ''
+    lastNumber = ''
+    pileStart = '' 
+    turn = 1
+    createGame()
+    io.in(roomName).emit('showCard', scramble, scramble2, pile)
+  } )
 
   socket.on('chooseColor', (color, vf, scram) => {
     lastColor = color;
@@ -549,7 +581,6 @@ io.on('connection', (socket) => {
 
   })
 
-
   socket.on('push', () => {
 
     if (turn == 1) {
@@ -567,9 +598,6 @@ io.on('connection', (socket) => {
     io.emit('showCard', scramble, scramble2, pile)
   })
 
-
-
-
   socket.on('play', (scram, id, player) => {
 
     validation = false;
@@ -580,11 +608,11 @@ io.on('connection', (socket) => {
       if (verificationCard(scram) == true) {
         if (player == 1) {
           turn = 2
-          socket.emit('turn', "Jogador 2")
+     
         }
         if (player == 2) {
           turn = 1
-          socket.emit('turn', "Jogador 1")
+         
         }
         lastColor = cards[scram].color;
         lastNumber = cards[scram].number;
@@ -656,7 +684,7 @@ io.on('connection', (socket) => {
 
 
     console.log("turno: " + turn)
-    io.sockets.to(roomName).emit('showCard', scramble, scramble2, pile)
+    io.in(roomName).emit('showCard', scramble, scramble2, pile , turn)
 
   })
 

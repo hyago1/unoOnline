@@ -311,8 +311,8 @@
 
 
   <div class="divCreateRom" id="sala">
-  
-    <input type="button" id="btnStart" onClick="startCreate()" value="Create" />
+    <input type="button" id="btnStart" onClick="startCreate()" value="Start" />
+    <input type="button" id="btnStart" onClick="reset()" value="Reset" />
   </div>
 
   <div id="joker" class="joker">
@@ -335,7 +335,7 @@
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
-
+    
 
  var socket = io();
    
@@ -608,7 +608,9 @@
     function startCreate() {
       socket.emit('start', )
     }
-
+    function reset() {
+      socket.emit('reset', )
+    }
 
 socket.on('escolha' ,(color,vf,a3, pile)=>{
 
@@ -750,13 +752,12 @@ socket.on('escolha' ,(color,vf,a3, pile)=>{
     function chooseColor(color,vf,scram) {
       socket.emit('chooseColor', color,vf,scram)
     }
+
     function playCard(scram, id,  player) {
 
       socket.emit('play', scram, id, player, sala.value)
       console.log(sala.value);
-      socket.on('turn' ,  (turn) =>{
-playerInfo.textContent=turn
-      })
+  
 
     }
   
@@ -766,13 +767,13 @@ playerInfo.textContent=turn
 
     }
 
-    socket.on('showCard' ,(d1,d2,pile) =>{
+    socket.on('showCard' ,(d1,d2,pile,turn) =>{
       var game = document.getElementById('game');
       var lista2 = document.getElementById("lista2");
       lista2.innerHTML = "";
       var lista = document.getElementById("lista");
       lista.innerHTML = "";
-
+      playerInfo.textContent="Player: "+turn
 
       game.innerHTML = `${pile}`
 
@@ -829,7 +830,6 @@ playerInfo.textContent=turn
     
 
     })
-
 
 
 
