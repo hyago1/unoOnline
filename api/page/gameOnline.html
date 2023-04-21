@@ -8,10 +8,25 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200&display=swap" rel="stylesheet" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,200;1,100&display=swap" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
   <style>
     body {
-      background-color: rgb(20, 20, 20);
+      background-color: rgb(25, 25, 25);
+
+    }
+      #checks{
+      
+      z-index:2;
+    }
+    #win{
+      font-family: 'Raleway', sans-serif;
+      color:white;
     }
 
     #btnStart,
@@ -49,7 +64,7 @@
     }
 
     .game {
-
+    
       display: flex;
     }
 
@@ -77,6 +92,7 @@
     }
 
     .push {
+      visibility:hidden;
       -webkit-touch-callout: none;
       /* iPhone OS, Safari */
       -webkit-user-select: none;
@@ -136,9 +152,6 @@
       right: 0px;
     }
 
-    ul {
-      margin: 50px;
-    }
 
     .decks {
       padding-top: 50px;
@@ -275,14 +288,20 @@
     }
 
     .ulDeck {
-
+      display:flex;
       align-items: flex-start;
       overflow-x: auto;
       overflow-y: hidden;
       max-width: 80%;
+      
     }
 
     .playerInfo {
+      
+      box-shadow: 30px 31px 27px -11px rgba(0,0,0,0.75);
+-webkit-box-shadow: 30px 31px 27px -11px rgba(0,0,0,0.75);
+-moz-box-shadow: 30px 31px 27px -11px rgba(0,0,0,0.75);
+      visibility:hidden;
       position: absolute;
       padding: 5px;
       height: auto;
@@ -304,18 +323,93 @@
       background-color: #77777744;
     }
 
-    .waitPlayer {
+    .create {
       background-color: rgb(107, 107, 107);
-      width: 15em;
-      height: 20em;
+      width: 17em;
+      height: 12em;
       border-radius: 8px;
       margin: 10px;
-
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      flex-direction:column;
+box-shadow: 0px -14px 36px -3px rgba(0,0,0,0.75);
+-webkit-box-shadow: 0px -14px 36px -3px rgba(0,0,0,0.75);
+-moz-box-shadow: 0px -14px 36px -3px rgba(0,0,0,0.75);
 
     }
-  #waitList{
-      display: flex;
-      flex-direction: column;
+
+
+
+    
+#userNameSala, #userNameUs{
+font-family: 'Raleway', sans-serif;
+  width:90%;
+  
+}
+    input ,button{
+      font-family: 'Raleway', sans-serif;
+  border:none;
+  padding:15px;
+
+   margin:10px;
+}
+    input:focus, input:focus {
+    box-shadow: 0 0 0 0;
+    outline: 0;
+}
+   .btnStart{
+        background-color: rgb(107, 107, 107);
+      color:white;
+     width:60%;
+       border-radius:5px;
+
+    }
+    .btnStart:hover{
+      box-shadow: -3px 7px 21px 0px rgba(0,0,0,0.75);
+-webkit-box-shadow: -3px 7px 21px 0px rgba(0,0,0,0.75);
+-moz-box-shadow: -3px 7px 21px 0px rgba(0,0,0,0.75);
+    }
+  .inputsCreate{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column
+  }
+    .divBtn{
+      display:flex;
+      justify-content:center;
+     
+      width:18em;
+    }
+  #list{
+
+  font-family: 'Raleway', sans-serif;
+  display:flex;
+  flex-direction:column;
+  justify-content:left;
+  align-items:left;
+  text-align:left;
+  padding:0;
+  margin:6px;
+  margin-left:25px;
+  font-size:15px;
+  color:#02d911;
+}
+    .listPlayer{
+      visibility:hidden;
+      display:flex;
+      margin:5px;
+      flex-direction:column;
+      position:absolute;
+      right:0px;
+      width:70px;
+      height:auto;
+      background-color:grey;
+    }
+    #spanPlayer {
+      margin:5px;
+      font-size:12px;
     }
   </style>
 
@@ -323,29 +417,41 @@
 </head>
 
 <body>
-  <div class="push" onClick="push()">
+  <div id="listPlayer" class="listPlayer">
+    <span id="spanPlayer">Players Online:</span>
+    <ul id="list">
+    </ul>
+  </div>
+  <div class="push" id="pushId" onClick="push()">
     Push
   </div>
   <div class="decks">
-    <div class="ulDeck">
-
+    <div id="checks">
+      <input type="checkbox" id="p1" />
+      <label>Player1</label>
+      <input type="checkbox" id="p2"/>
+      <label>Player2</label>
+    </div>
+     
+    <div class="ulDeck" id="deck1">
       <ul id="lista"></ul>
     </div>
     <div class="divStartReset" id="sala">
-
-      <div>
-        <input type="button" id="btnStart" onClick="startCreate()" value="Pronto" />
-        <input type="button" id="btnStart" onClick="reset()" value="Reset" />
+      <div class="create" id="createSala">
+        <div class="inputsCreate">
+           <input type="text" name="nomedasala"   placeholder="Nome da Sala"  id="userNameSala">
+        <input type="text" name="nick"   placeholder="Usuario"  id="userNameUs">
+        </div>
+        
       </div>
-      <div class="waitPlayer">
-        <ul id="waitList">
-        </ul>
+ <div class="divBtn" >
+        <input type="button" class="btnStart" id="btnStart" onClick="startCreate()" value="Pronto" />
+        <input type="button"class="btnStart" id="btnStart" onClick="reset()" value="Reset" />
       </div>
-
     </div>
 
     <ul id="game"></ul>
-    <div class="ulDeck">
+    <div class="ulDeck" id="deck2">
       <ul id="lista2"></ul>
     </div>
 
@@ -367,21 +473,13 @@
 
 
 
-  <div class="playerInfo">
+  <div class="playerInfo" id="playerInfo">
     <span id="id">...</span>
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
-
-
     var socket = io();
-
-
-
-
-
-
     const cards = [
       {
         cod: "B+4",
@@ -646,26 +744,149 @@
     ];
     var room = document.getElementById('sala')
     var playerInfo = document.getElementById("id");
+    var p1 = document.getElementById("p1");
+    var p2 = document.getElementById("p2");
     var waitList = document.getElementById('waitList')
+    var userNameSala = document.getElementById("userNameSala")
+    var userNameUs = document.getElementById("userNameUs")
+    
+    function s() {
+
+           var lista2 = document.getElementById("lista2");
+      var lista = document.getElementById("lista");
+    
+      if (p1.checked) {
+        for (let i = 0; i < 7; i++) {
+        lista.innerHTML = `<li class="list">
+    <div style="background-color:grey" class="card" id="${i}" onClick=""> 
+    <div class="cornerUpDiv">
+    <span id="cornerUp">
+    </span> </div>
+       <span>
+      </span> 
+    <div class="cornerDownDiv">
+    <span id="cornerDown"></span></div> 
+    </div></li>`;
+      }
+      }
+          if (p2.checked) {
+        for (let i = 0; i < 7; i++) {
+        lista2.innerHTML = `<li class="list">
+    <div style="background-color:grey" class="card" id="${i}" onClick=""> 
+    <div class="cornerUpDiv">
+    <span id="cornerUp">
+    </span> </div>
+       <span>
+      </span> 
+    <div class="cornerDownDiv">
+    <span id="cornerDown"></span></div> 
+    </div></li>`;
+      }
+      }
+    }
     function startCreate() {
-      socket.emit('start')
+ 
+        if ( userNameUs.value == "" || userNameSala.value == "") {
+       swal({
+    text: "Preencha todos os campos",
+    icon: "warning",
+    button: "Ok",
+  })
+      }else{
+              socket.emit('start', userNameUs.value , userNameSala.value )
+
+      }
     }
     function reset() {
+     
       socket.emit('reset')
     }
 
 
-    // socket.on('wait' , (user) =>{
-    //   for (let i = 0; i <= user.length; i++) {
-    //     console.log(user);
-    //     if (user != null) {
-    //       waitList.innerHTML = `<li>${user[i]}</li>`
-        
-    //     }
-        
-    //   }
-    // })
 
+    function show(d1,d2) {
+      var lista2 = document.getElementById("lista2");
+      var lista = document.getElementById("lista");
+      lista2.innerHTML = "";
+      lista.innerHTML = "";
+
+
+           if (p1.checked) {
+        for (let i = 0; i < d1.length; i++) {
+        lista.innerHTML += `<li class="list">
+    <div style="background-color:grey" class="card" id="${i}" onClick=""> 
+   
+    </div></li>`;
+      }
+      }
+      else{
+         
+         for (let i = 0; i < d1.length; i++) {
+        lista.innerHTML += `<li class="list">
+    <div style="background-color:${cards[d1[i]].color
+          }" class="card" id="${i}" onClick="playCard(${d1[i]} , ${i} , 1)"> 
+    <div class="cornerUpDiv">
+    <span id="cornerUp">
+      ${specialCard(
+            cards[d1[i]].number,
+            "u"
+          )}</span> </div>
+       <span> ${specialCard(
+            cards[d1[i]].number,
+            "m"
+          )}
+      </span> 
+    <div class="cornerDownDiv">
+    <span id="cornerDown">${specialCard(
+            cards[d1[i]].number,
+            "d"
+          )}</span></div> 
+    </div></li>`;
+      }
+
+      }
+         if (p2.checked) {
+        for (let i = 0; i < d2.length; i++) {
+        lista2.innerHTML += `<li class="list">
+    <div style="background-color:grey" class="card" id="${i}" onClick=""> 
+    
+    </div></li>`;
+      }
+      }
+      else{
+           for (let i = 0; i < d2.length; i++) {
+        lista2.innerHTML += `<li class="list">
+    <div  style="background-color:${cards[d2[i]].color
+          };" class="card" id="${i}" onClick="playCard(${d2[i]} , ${i} , 2)"> 
+    <div class="cornerUpDiv">
+    <span id="cornerUp">
+      ${specialCard(
+            cards[d2[i]].number,
+            "u"
+          )}</span> </div>
+       <span> ${specialCard(
+            cards[d2[i]].number,
+            "m"
+          )}
+      </span> 
+    <div class="cornerDownDiv">
+    <span id="cornerDown">${specialCard(
+            cards[d2[i]].number,
+            "d"
+          )}</span></div> 
+    </div></li>`;
+
+
+      } 
+      }
+    
+  
+
+
+
+      document.getElementById("lista2").lastChild.scrollIntoView();
+      document.getElementById("lista").lastChild.scrollIntoView();
+    }
 
     socket.on('escolha', (color, vf, a3, pile) => {
 
@@ -729,77 +950,66 @@
       return typeCard;
     }
 
-    socket.on('start', (d1, d2, u, p, user) => {
+
+    socket.on('showPlayersOn',(users)=>{
+        var listPlayer = document.getElementById('list');
+
+        for (let i = 0; i <= users.length; i++) {
+        
+        if (users[i] != null) {
+           listPlayer.innerHTML = `<li>${users[i].nome}</li>`
+        }
+       
+      }
+})
+
+
+    socket.on('win',(nome, p) => {
+      var play1 = document.getElementById("deck1");
+      var play2 = document.getElementById("deck2");
+      if(p == 1){
+        play1.innerHTML = `<h2 id="win">O player: ${nome} ganhou a partida!!!</h2>`
+      }else{
+        play2.innerHTML = `<h2 id="win">O player: ${nome} ganhou a partida!!!</h2>`
+      }
+    })
+    
+    socket.on('start', (d1,d2, u, p, users) => {
+         
       var startbtn = document.getElementById('btnStart');
       var sala = document.getElementById('sala');
+      var listPlayerDiv = document.getElementById('listPlayer');
+      var listPlayer = document.getElementById('list');
       var game = document.getElementById('game');
+      var push = document.getElementById("pushId");
+      var Info = document.getElementById('playerInfo');
       var lista2 = document.getElementById("lista2");
-      lista2.innerHTML = "";
       var lista = document.getElementById("lista");
+      lista2.innerHTML = "";
       lista.innerHTML = "";
       game.innerHTML = `${u}`
-
-
+      console.log(p) 
+      var visible = "visible";
       var hidden = "hidden";
+      listPlayerDiv.style.visibility = visible;
+      Info.style.visibility = visible;
+      push.style.visibility = visible;
       startbtn.style.visibility = hidden;
-      sala.style.visibility = hidden
+      sala.style.visibility = hidden;
 
-      playerInfo.textContent = "Vez de: " + user
-
-
-
-      for (let i = 0; i < d1.length; i++) {
-        lista.innerHTML += `<li class="list">
-    <div style="background-color:${cards[d1[i]].color
-          }" class="card" id="${i}" onClick="playCard(${d1[i]} , ${i} , 1)"> 
-    <div class="cornerUpDiv">
-    <span id="cornerUp">
-      ${specialCard(
-            cards[d1[i]].number,
-            "u"
-          )}</span> </div>
-       <span> ${specialCard(
-            cards[d1[i]].number,
-            "m"
-          )}
-      </span> 
-    <div class="cornerDownDiv">
-    <span id="cornerDown">${specialCard(
-            cards[d1[i]].number,
-            "d"
-          )}</span></div> 
-    </div></li>`;
+      playerInfo.textContent = "Vez de: " + p
+      listPlayer.innerHTML = "";
+      
+      for (let i = 0; i <= users.length; i++) {
+        
+        if (users[i] != null) {
+           listPlayer.innerHTML += `<li>${users[i].nome}</li></br>`
+        }
+       
       }
 
-      for (let i = 0; i < d2.length; i++) {
-        lista2.innerHTML += `<li class="list">
-    <div  style="background-color:${cards[d2[i]].color
-          };" class="card" id="${i}" onClick="playCard(${d2[i]} , ${i} , 2)"> 
-    <div class="cornerUpDiv">
-    <span id="cornerUp">
-      ${specialCard(
-            cards[d2[i]].number,
-            "u"
-          )}</span> </div>
-       <span> ${specialCard(
-            cards[d2[i]].number,
-            "m"
-          )}
-      </span> 
-    <div class="cornerDownDiv">
-    <span id="cornerDown">${specialCard(
-            cards[d2[i]].number,
-            "d"
-          )}</span></div> 
-    </div></li>`;
-
-
-      }
-
-
-
-      document.getElementById("lista2").lastChild.scrollIntoView();
-      document.getElementById("lista").lastChild.scrollIntoView();
+     show(d1,d2)
+   
     })
 
     function chooseColor(color, vf, scram) {
@@ -807,20 +1017,20 @@
     }
 
     function playCard(scram, id, player) {
+    
 
+      
       socket.emit('play', scram, id, player, sala.value)
-      console.log(sala.value);
-
+            
+      
 
     }
 
     function push() {
       socket.emit('push')
-
-
     }
 
-    socket.on('showCard', (d1, d2, pile, turn) => {
+    socket.on('showCard', (d1, d2, pile, turn,users) => {
       var game = document.getElementById('game');
       var lista2 = document.getElementById("lista2");
       lista2.innerHTML = "";
@@ -829,57 +1039,18 @@
       playerInfo.textContent = "Vez de: " + turn
       console.log(pile);
       game.innerHTML = `${pile}`
-
-
-
-
-      for (let i = 0; i < d2.length; i++) {
-        lista2.innerHTML += `<li class="list">
-    <div   style="background-color:${cards[d2[i]].color
-          };" class="card" id="${i}" onClick="playCard(${d2[i]} , ${i} , 2)"> 
-    <div class="cornerUpDiv">
-    <span id="cornerUp">
-      ${specialCard(
-            cards[d2[i]].number,
-            "u"
-          )}</span> </div>
-       <span> ${specialCard(
-            cards[d2[i]].number,
-            "m"
-          )}
-      </span> 
-    <div class="cornerDownDiv">
-    <span id="cornerDown">${specialCard(
-            cards[d2[i]].number,
-            "d"
-          )}</span></div> 
-    </div></li>`;
+      var listPlayer = document.getElementById('list');
+      listPlayer.innerHTML = "";
+      
+      for (let i = 0; i <= users.length; i++) {
+        
+        if (users[i] != null) {
+           listPlayer.innerHTML += `<li>${users[i].nome}</li>`
+        }
+       
       }
 
-      for (let i = 0; i < d1.length; i++) {
-        lista.innerHTML += `<li class="list">
-    <div  style="background-color:${cards[d1[i]].color
-          };" class="card" id="${i}" onClick="playCard(${d1[i]} , ${i} , 1)"> 
-    <div class="cornerUpDiv">
-    <span id="cornerUp">
-      ${specialCard(
-            cards[d1[i]].number,
-            "u"
-          )}</span> </div>
-       <span> ${specialCard(
-            cards[d1[i]].number,
-            "m"
-          )}
-      </span> 
-    <div class="cornerDownDiv">
-    <span id="cornerDown">${specialCard(
-            cards[d1[i]].number,
-            "d"
-          )}</span></div> 
-    </div></li>`;
-      }
-      document.getElementById("lista2").lastChild.scrollIntoView();
-      document.getElementById("lista").lastChild.scrollIntoView();
+      show(d1,d2)
 
 
     })

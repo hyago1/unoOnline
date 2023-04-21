@@ -7,37 +7,28 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 app.use(express.static('public'))
-app.use(express. urlencoded());
+app.use(express.urlencoded());
 
 app.use(express.json({ extended: true }));
 
 
-let user
-let roomName;
-let users  = new Array();
+
+
+let roomName
+let users = new Array()
 users.length = 2
+
+
+//da placa de vez:
+let names = "";
+//da placa de vez:
+
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/page/index.html');
 });
-app.get('/createRoom', (req, res) => {
-  res.sendFile(__dirname + '/page/createRoom.html');
-});
-app.post('/gameOnline', (req, res) => {
 
-  roomName = req.body.nomedasala;
-  user = req.body.nick
-  users.push(user)
-  
-  // for (let i = 0; i < users.length; i++) {
-  //   if (users[i] != user) {
-  //     users[i] = user
-  //     break
-  //       }    
-      
-  //     }
-        console.log(users);
-
+app.get('/gameOnline', (req, res) => {
 
   res.sendFile(__dirname + '/page/gameOnline.html');
 });
@@ -310,8 +301,6 @@ const cards = [
   },
 ];
 
-
-
 const jokerCard = { cod: "Joker", number: "X" }
 
 var scramble = new Array();
@@ -319,7 +308,7 @@ scramble.length = 7;
 var scramble2 = new Array();
 scramble2.length = 7;
 
-var pileStart ='';
+var pileStart = '';
 var pile;
 
 var game = new Array();
@@ -333,7 +322,6 @@ scrambleAux.length = 7;
 var scramble2Aux = new Array();
 scramble2Aux.length = 7;
 //Aux's
-
 
 //Aux's
 var gameAux = new Array();
@@ -360,8 +348,17 @@ var rooms = []
 
 function createGame() {
 
-  var n = Math.floor(Math.random() * cards.length);
-  for (let i = 0; i < game.length; i++) {
+  var n = Math.floor(Math.random() * cards.length); 
+  
+  if(cards[n].number == "X" || cards[n].number == "@" || cards[n].number == "()" || cards[n].number == "M2" || cards[n].number == "M4"  ){
+        console.log("Carta especial no meio, criando dnv....")
+    console.log("carta DO MEIO:"+cards[n].number)
+createGame();
+  }
+  else{
+ console.log("Deu certo!!! é diferente")
+     console.log("carta DO MEIO:"+cards[n].number)
+      for (let i = 0; i <= game.length; i++) {
     if (game[i] == null) {
       game[i] = n;
     }
@@ -369,30 +366,30 @@ function createGame() {
     lastColor = cards[n].color;
     lastNumber = cards[n].number
 
-    if (pileStart == '') {
       console.log("criou o pile start");
-          pileStart = `
+      pileStart = `
           <div  style="background-color:${cards[n].color};" class="card" id="${i}" > 
           <div class="cornerUpDiv">
           <span id="cornerUp"> ${specialCard(
-      cards[n].number,
-      "u"
-    )}</span> </div> <span> ${specialCard(
-      cards[n].number,
-      "m"
-    )}</span> 
+        cards[n].number,
+        "u"
+      )}</span> </div> <span> ${specialCard(
+        cards[n].number,
+        "m"
+      )}</span> 
           <div class="cornerDownDiv">
           <span id="cornerDown"> ${specialCard(
-      cards[n].number,
-      "d"
-    )}</span></div> 
+        cards[n].number,
+        "d"
+      )}</span></div> 
           </div>`;
 
-    }
-
-
+    
     break;
   }
+  
+  }
+
 
   for (let i = 0; i < scramble2.length; i++) {
     if (scramble[i] == null) {
@@ -405,7 +402,6 @@ function createGame() {
     }
   }
 }
-
 
 function specialCard(typeCard, U, player) {
   var circleMainBlock = `<div class="circleBlock"><div class="diagonal"></div></div>`;
@@ -519,40 +515,73 @@ function addTwoCards(player, id) {
     addCardsInDeck(1)
   }
   console.log("turno: " + turn)
-  io.emit('showCard', scramble, scramble2, pile)
+  io.emit('showCard', scramble, scramble2, pile,users)
 
 }
 
 
 
 io.on('connection', (socket) => {
-  io.emit('wait' , users )
-  pile = pileStart
-  
-  socket.on('start', () => {
-  
+
+ 
+  console.log("conection aqui")
+  console.log(socket.id)
+
+  socket.on('start', (usu, namOfRoom) => {
+    console.log(">>>>>>>>>> " + usu)
+
+
+    let user = {
+      "nome": usu,
+      "id": socket.id
+
+    }
+
     if (rooms != []) {
       for (let i = 0; i <= rooms.length; i++) {
-        if (rooms[i] != roomName) { 
-        
-          user = users[0]
+        if (rooms[i] != namOfRoom) {
+          roomName = namOfRoom
+
+          console.log(user)
+          for (let i = 0; i <= users.length; i++) {
+            if (users[i] == undefined) {
+              users[i] = user
+              console.log("adcionou o usuario");
+              break;
+            }
+          }
+
           socket.leaveAll();
-          console.log("adcionou");
-          console.log(user);
-          rooms.push(roomName)
-          socket.join(roomName)
+          console.log(users)
+          console.log("criou a sala");
+          rooms.push(namOfRoom)
+          socket.join(namOfRoom)
           createGame();
-          io.in(roomName).emit('start', scramble, scramble2, pileStart, user)
+           pile = pileStart
+          io.in(namOfRoom).emit('start', scramble, scramble2, pileStart, users[0].nome, users)
         
           break
         }
         else {
+          roomName = namOfRoom
+
+
+
+          for (let i = 0; i <= users.length; i++) {
+            if (users[i] == undefined) {
+
+              users[i] = user
+              console.log("adcionou o user na sala criada");
+              break;
+            }
+          }
           socket.leaveAll();
-          console.log("entrou");      
-          user = users[1]
-          socket.join(roomName)
-          io.in(roomName).emit('start', scramble, scramble2, pileStart, user)
+          console.log(users)
+          console.log("entrou na sala");
+          socket.join(namOfRoom)
+          io.in(namOfRoom).emit('start', scramble, scramble2, pileStart, users[0].nome,users)
           break
+         
         }
 
       }
@@ -565,29 +594,60 @@ io.on('connection', (socket) => {
 
 
   socket.on("disconnect", (reason) => {
+    let id = null;
+   for(var i = 0; i <= users.length; i++){   
+     if(users[i] != null){
+        if(users[i].id == socket.id){
+         id = i
+      
+        break
+     }
+     
+   
+    }
+   }
+    
+    if(id != null){
+      
+      users.splice(id, 1)
+    }
+    if(users == 0){
+      names = ""
+    }
+    
+  console.log(users)
 
 
-    console.log("desconectou");
+    io.in(roomName).emit('showPlayersOn',users)
 
   });
 
-  socket.on('reset', () =>{
+
+
+
+
+  socket.on('reset', () => {
     scramble = new Array();
     scramble.length = 7
     scramble2 = new Array();
     scramble2.length = 7
     game = new Array();
     game.length = 1000;
-  
-    pull = new Array(); 
+    users = new Array()
+    users.length = 2
+
+    console.log("removido")
+    console.log(users)
+
+    pull = new Array();
     pull.length = 500;
     lastColor = ''
     lastNumber = ''
-    pileStart = '' 
+    
     turn = 1
     createGame()
-    io.in(roomName).emit('showCard', scramble, scramble2, pileStart)
-  } )
+    io.in(roomName).emit('showCard', scramble, scramble2, pileStart, names ,users)
+  })
 
   socket.on('chooseColor', (color, vf, scram) => {
     lastColor = color;
@@ -622,11 +682,14 @@ io.on('connection', (socket) => {
 
     }
     console.log("turno: " + turn)
-    io.emit('showCard', scramble, scramble2, pile, user)
+    io.emit('showCard', scramble, scramble2, pile, names,users)
   })
 
   socket.on('play', (scram, id, player) => {
 
+      
+
+    
     validation = false;
 
     if (player == turn) {
@@ -634,13 +697,22 @@ io.on('connection', (socket) => {
 
       if (verificationCard(scram) == true) {
         if (player == 1) {
+          if (users[1] != null) {
+            names = users[1].nome
+          }
+          else {
+            names = "Outro player"
+          }
           turn = 2
-          user = users[1]
-     
+
+
         }
         if (player == 2) {
+
           turn = 1
-          user = users[0]
+          console.log(">>>>>>>>>>>>turno: "+users[0].nome+"<<<<<<<<<<")
+          names = users[0].nome
+
         }
         lastColor = cards[scram].color;
         lastNumber = cards[scram].number;
@@ -698,6 +770,7 @@ io.on('connection', (socket) => {
 
           if (player == 1) {
             scramble.splice(id, 1);
+            
           }
           if (player == 2) {
             scramble2.splice(id, 1);
@@ -709,10 +782,13 @@ io.on('connection', (socket) => {
 
     }
 
-
-
-    console.log("turno: " + user)
-    io.in(roomName).emit('showCard', scramble, scramble2, pile , user)
+    if(scramble.length == 0){
+      io.in(roomName).emit('win',users[0].nome, "1")
+    }
+    if(scramble2.length == 0){
+      io.in(roomName).emit('win',users[1].nome, "2")
+    }
+    io.in(roomName).emit('showCard', scramble, scramble2, pile, names,users)
 
   })
 
