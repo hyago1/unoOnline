@@ -13,15 +13,36 @@
 <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,200;1,100&display=swap" rel="stylesheet">
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js">
+
+   
+</script>
+
 
   <style>
+    
     body {
-      background-color: rgb(25, 25, 25);
+      background-color: #120d19;
 
+    
     }
-      #checks{
+    select{
+      margin:10px;
+      padding:5px;
+      border:none;
+    }
+     select:focus {
+       padding:5px;
+       
+    box-shadow: 0 0 0 0;
+    outline: 0;
+}
+    #checks{
       
+        width:90%;
+    display:flex;
+
+    flex-direction:column;
       z-index:2;
     }
     #win{
@@ -32,7 +53,7 @@
     #btnStart,
     #sala {
       padding: 15px;
-      border: none;
+    
       cursor: pointer;
 
     }
@@ -53,35 +74,84 @@
 
     ul {
       display: flex;
-      margin: 35px;
+      margin: 20px;
       color: rgb(255, 255, 255);
       height: auto;
     }
 
     .list {
-      margin: 2px;
+      margin: -5px;
       display: flex;
     }
-
+  
+    .listOp {
+      
+      display: flex;
+      transform: rotate(90deg);
+    }
     .game {
     
       display: flex;
+     
+      
     }
-
+#game{
+ grid-column:4;
+      padding:0px;
+}
     .card {
+
+      -webkit-box-shadow: -7px 2px 15px -1px rgba(0,0,0,0.78); 
+box-shadow: -7px 2px 15px -1px rgba(0,0,0,0.78);
       font-family: "Plus Jakarta Sans", sans-serif;
       cursor: pointer;
       padding-right: 2px;
-      width: 80px;
-      height: 120px;
+      width: 75px;
+      height: 115px;
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+      align-items: center;
+      flex-direction: column;
+      border-radius: 7px;
+      font-size: 23px;
+      z-index:2;
+    }
+    
+    .cardOp{
+    
+  
+      -webkit-box-shadow: -7px 2px 15px -1px rgba(0,0,0,0.78); 
+box-shadow: -7px 2px 15px -1px rgba(0,0,0,0.78);
+      cursor: pointer;
+      padding-right: 2px;
+      width: 40px;
+      height: 60px;
+       margin: 0px;
       display: flex;
       justify-content: space-around;
       text-align: center;
       align-items: center;
       flex-direction: column;
       border-radius: 8px;
-      font-size: 25px;
     }
+       .cardOpl{
+         
+      -webkit-box-shadow: -7px 2px 15px -1px rgba(0,0,0,0.78); 
+box-shadow: -7px 2px 15px -1px rgba(0,0,0,0.78);
+      cursor: pointer;
+      padding-right: 2px;
+      width: 60px;
+      height: 40px;
+      margin: 0px;
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+      align-items: center;
+      flex-direction: column;
+      border-radius: 8px;
+    }
+
 
     .card:hover {
       transition-duration: 500ms;
@@ -89,6 +159,7 @@
       -moz-transform: scale(1.2);
       -o-transform: scale(1.2);
       transform: scale(1.2);
+      z-index:4;
     }
 
     .push {
@@ -132,28 +203,32 @@
       font-size: 8px;
       float: right;
       right: 0px;
+            
     }
 
     .cornerDownDiv {
       padding-right: 10px;
       width: 100%;
       text-align: right;
+
     }
 
     .cornerUpDiv {
       padding-left: 10px;
       width: 100%;
       text-align: left;
+   
     }
 
     #cornerUp {
       font-size: 8px;
       float: left;
       right: 0px;
+        
     }
 
 
-    .decks {
+    .decksMain {
       padding-top: 50px;
       -webkit-touch-callout: none;
       /* iPhone OS, Safari */
@@ -172,8 +247,29 @@
       flex-direction: column;
       height: 90vh;
     }
+    .decks {
+      -webkit-touch-callout: none;
+      /* iPhone OS, Safari */
+      -webkit-user-select: none;
+      /* Chrome, Safari 3 */
+      -khtml-user-select: none;
+      /* Safari 2 */
+      -moz-user-select: none;
+      /* Firefox */
+      -ms-user-select: none;
+      /* IE10+ */
+      user-select: none;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      justify-items: center;
+      align-items: center;
+      flex-direction: column;
+      height:80%;
+      width:80%;
+  
+    }
 
-    .joker {
+    #joker {
       visibility: hidden;
       position: fixed;
       right: 0px;
@@ -257,6 +353,7 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
+            z-index: -1;
     }
 
     .circleBlock {
@@ -277,6 +374,7 @@
       width: 8px;
       height: 8px;
       border: 1px solid rgb(255, 255, 255);
+      
     }
 
     .diagonal {
@@ -289,13 +387,46 @@
 
     .ulDeck {
       display:flex;
-      align-items: flex-start;
+      justify-content:center;
+      flex-direction:column;
       overflow-x: auto;
       overflow-y: hidden;
       max-width: 80%;
       
     }
 
+    .ulDeck2 {
+      justify-content:center;
+      
+      display:flex;
+      flex-direction:column;
+      overflow: auto;
+      padding-inline:5px;
+      
+      height:80%;
+      
+    }
+#deck1 {
+   grid-column-start: 2;
+   grid-column-end: 7;
+
+}
+
+
+#deck3 {
+    grid-column: 1;
+}
+    #deck2{
+    grid-column-start: 2;
+   grid-column-end: 7;
+      -webkit-box-shadow: 3px 50px 47px -4px #000000; 
+box-shadow: 3px 50px 47px -4px #000000;
+ 
+}
+     #deck4 {
+  grid-column:7;
+ 
+}
     .playerInfo {
       
       box-shadow: 30px 31px 27px -11px rgba(0,0,0,0.75);
@@ -324,9 +455,10 @@
     }
 
     .create {
-      background-color: rgb(107, 107, 107);
+      background-color:#183d59;
       width: 17em;
-      height: 12em;
+      height: auto;
+      padding:5px;
       border-radius: 8px;
       margin: 10px;
       display:flex;
@@ -356,10 +488,12 @@ font-family: 'Raleway', sans-serif;
 }
     input:focus, input:focus {
     box-shadow: 0 0 0 0;
+    
     outline: 0;
 }
    .btnStart{
-        background-color: rgb(107, 107, 107);
+        background-color: #120d19;
+     border:2px solid #1e4867;
       color:white;
      width:60%;
        border-radius:5px;
@@ -369,6 +503,8 @@ font-family: 'Raleway', sans-serif;
       box-shadow: -3px 7px 21px 0px rgba(0,0,0,0.75);
 -webkit-box-shadow: -3px 7px 21px 0px rgba(0,0,0,0.75);
 -moz-box-shadow: -3px 7px 21px 0px rgba(0,0,0,0.75);
+      transition:0.4s;
+      background-color: #1e4867;
     }
   .inputsCreate{
     display:flex;
@@ -381,6 +517,10 @@ font-family: 'Raleway', sans-serif;
       justify-content:center;
      
       width:18em;
+    }
+    #cardOponent{
+      width:100%;
+      height:100%;
     }
   #list{
 
@@ -396,6 +536,7 @@ font-family: 'Raleway', sans-serif;
   font-size:15px;
   color:#02d911;
 }
+    
     .listPlayer{
       visibility:hidden;
       display:flex;
@@ -403,16 +544,67 @@ font-family: 'Raleway', sans-serif;
       flex-direction:column;
       position:absolute;
       right:0px;
-      width:70px;
+      width:100px;
       height:auto;
-      background-color:grey;
+      border-radius:8px;
+      background-color:#5e0355;
     }
     #spanPlayer {
       margin:5px;
       font-size:12px;
     }
-  </style>
+    #dp3{
+      display:none;
+    }
+    #dp4{
+      display:none;
+    }
+    #lista3  , #lista4{
+      display: inline-block;
+    }
+    #lista, #lista2 ,#lista3 , #lista4{
+            padding:0px;
+    }
+    .spanP{
+      text-align:right;
+      color:white;
+    }
+    #spanP1{
+      position:absolute;
+      bottom: 12px;
+      left:50%;
+      visibility:hidden;
+    }
+    .check{
+      display: flex;
+    align-items: center;
+      padding:2px;
+      background-color:#12334b;
+      color:white;
+      margin:3px;
+      
+    }
+    .inpT{
+      background-color:#183d59;
+        border-bottom:2px solid #0e283a;
+      color:white;
+    } 
+#userNameSala:focus, #userNameUs:focus{
+  transition:0.6s;
+  width:100%;
+}
 
+    .checkbox{
+      padding:20px;
+    }
+
+      
+
+
+    }
+
+  </style>
+  
   <title>Uno Minimalista</title>
 </head>
 
@@ -425,37 +617,80 @@ font-family: 'Raleway', sans-serif;
   <div class="push" id="pushId" onClick="push()">
     Push
   </div>
-  <div class="decks">
-    <div id="checks">
-      <input type="checkbox" id="p1" />
-      <label>Player1</label>
-      <input type="checkbox" id="p2"/>
-      <label>Player2</label>
-    </div>
+  <div class="decksMain" id="dk"> 
+    <div class="decks" >
+        <span class="spanP" id="spanP1">player</span>
+      
      
     <div class="ulDeck" id="deck1">
       <ul id="lista"></ul>
+ 
+    </div>
+      
+     <div class="ulDeck2" id="deck3">
+      <ul id="lista3"></ul>
+        
     </div>
     <div class="divStartReset" id="sala">
+      
       <div class="create" id="createSala">
+        <div id="checks">
+      <select id="Idselect" >
+        <option value="2">2 players</option>
+        <option value="3" >3 players</option>
+        <option value="4">4 players</option>   
+      </select>
+          <div>
+                <div id="dp1" class="check">
+    <input type="checkbox" class="checkbox" id="p1" />
+ 
+      <label>Player 1</label>
+            </div>
+    <div id="dp2" class="check">
+    <input type="checkbox" class="checkbox"  id="p2" />
+      <label>Player 2</label>
+            </div>
+            <div id="dp3" class="check">
+    <input type="checkbox"  class="checkbox"  id="p3" />
+      <label>Player 3</label>
+            </div>
+            <div id="dp4" class="check">
+    <input type="checkbox" class="checkbox"  id="p4" />
+      <label>Player 4</label>
+            </div>
+
+            
+          </div>
+  
+    </div>
         <div class="inputsCreate">
-           <input type="text" name="nomedasala"   placeholder="Nome da Sala"  id="userNameSala">
-        <input type="text" name="nick"   placeholder="Usuario"  id="userNameUs">
+          
+           <input type="text" autocomplete="off" class="inpT" name="nomedasala"   placeholder="Nome da Sala"  id="userNameSala">
+        <input type="text" class="inpT"  name="nick" autocomplete="off"    placeholder="Usuario"  id="userNameUs">
         </div>
-        
+         
       </div>
  <div class="divBtn" >
         <input type="button" class="btnStart" id="btnStart" onClick="startCreate()" value="Pronto" />
-        <input type="button"class="btnStart" id="btnStart" onClick="reset()" value="Reset" />
       </div>
     </div>
 
     <ul id="game"></ul>
-    <div class="ulDeck" id="deck2">
+    
+  
+ 
+    <div class="ulDeck2" id="deck4">
+      <ul id="lista4"></ul>
+           
+    </div>
+       <div class="ulDeck" id="deck2">
       <ul id="lista2"></ul>
+              
     </div>
 
-  </div>
+    
+  </div></div>
+ 
 
 
 
@@ -479,6 +714,16 @@ font-family: 'Raleway', sans-serif;
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
+
+      swal({
+    text: "Selecione qual player voce é",
+    icon: "warning",
+    button: "Blz",
+  })
+
+
+
+    
     var socket = io();
     const cards = [
       {
@@ -746,83 +991,113 @@ font-family: 'Raleway', sans-serif;
     var playerInfo = document.getElementById("id");
     var p1 = document.getElementById("p1");
     var p2 = document.getElementById("p2");
+    var p3 = document.getElementById("p3");
+    var p4 = document.getElementById("p4");
     var waitList = document.getElementById('waitList')
     var userNameSala = document.getElementById("userNameSala")
     var userNameUs = document.getElementById("userNameUs")
     
-    function s() {
 
-           var lista2 = document.getElementById("lista2");
-      var lista = document.getElementById("lista");
-    
-      if (p1.checked) {
-        for (let i = 0; i < 7; i++) {
-        lista.innerHTML = `<li class="list">
-    <div style="background-color:grey" class="card" id="${i}" onClick=""> 
-    <div class="cornerUpDiv">
-    <span id="cornerUp">
-    </span> </div>
-       <span>
-      </span> 
-    <div class="cornerDownDiv">
-    <span id="cornerDown"></span></div> 
-    </div></li>`;
-      }
-      }
-          if (p2.checked) {
-        for (let i = 0; i < 7; i++) {
-        lista2.innerHTML = `<li class="list">
-    <div style="background-color:grey" class="card" id="${i}" onClick=""> 
-    <div class="cornerUpDiv">
-    <span id="cornerUp">
-    </span> </div>
-       <span>
-      </span> 
-    <div class="cornerDownDiv">
-    <span id="cornerDown"></span></div> 
-    </div></li>`;
-      }
-      }
-    }
-    function startCreate() {
+ document.querySelector('select').addEventListener('change', function(){
+
+
+  var visible = "block";
+  var none = "none";
+  var check = "true"
+  var dp2= document.getElementById("dp2");
+  var dp3 = document.getElementById("dp3");
+  var dp4 = document.getElementById("dp4");
+  let select = document.getElementById('Idselect')
+  let value = select.options[select.selectedIndex].value;
+   
+console.log(value)
+    if(value == 2){
+
+      dp3.style.display = none;
+      dp4.style.display = none;
+   }
+    if(value == 3){
+
+    dp3.style.display = visible;
+    dp4.style.display = none;
+   }
+    if(value == 4){
+   
+      dp4.style.display = visible;
+      dp3.style.display = visible;
  
-        if ( userNameUs.value == "" || userNameSala.value == "") {
-       swal({
+   }
+
+     
+   
+});
+
+
+    function startCreate() {
+  let select = document.getElementById('Idselect')
+  let value = select.options[select.selectedIndex].value;
+        if ( userNameUs.value == "" || userNameSala.value == "" ) {
+         
+              swal({
     text: "Preencha todos os campos",
     icon: "warning",
     button: "Ok",
   })
-      }else{
-              socket.emit('start', userNameUs.value , userNameSala.value )
+          
+     
+      }
+        else{
+
+    if(value == 2){
+   socket.emit('start', userNameUs.value , userNameSala.value , 2)
+   }
+    if(value == 3){
+ socket.emit('start', userNameUs.value , userNameSala.value, 3 )
+   }
+    if(value == 4){
+    socket.emit('start', userNameUs.value , userNameSala.value , 4)
+
+   }
+  
 
       }
     }
-    function reset() {
+
+
+
+    
+
+    function show(d1,d2,d3,d4, name) {
+
      
-      socket.emit('reset')
-    }
-
-
-
-    function show(d1,d2) {
       var lista2 = document.getElementById("lista2");
       var lista = document.getElementById("lista");
+      var lista3 = document.getElementById("lista3");
+      var lista4 = document.getElementById("lista4");
+      var sp1 = document.getElementById("spanP1");
+       
       lista2.innerHTML = "";
-      lista.innerHTML = "";
+      lista.innerHTML = "";   
+      lista3.innerHTML = "";
+      lista4.innerHTML = "";
+      sp1.style.visibility = 'visible'
+      sp1.textContent = `${userNameUs.value}`
+    
+      let select = document.getElementById('Idselect')
+      let value = select.options[select.selectedIndex].value;
 
 
-           if (p1.checked) {
-        for (let i = 0; i < d1.length; i++) {
-        lista.innerHTML += `<li class="list">
-    <div style="background-color:grey" class="card" id="${i}" onClick=""> 
+      if (value == 2) {
    
+          if (p1.checked) {
+        for (let i = 0; i < d2.length; i++) {
+        lista.innerHTML += `<li class="list">
+    <div style="background-color:grey" class="cardOp" id="${i}" onClick=""> 
+()
     </div></li>`;
       }
-      }
-      else{
-         
-         for (let i = 0; i < d1.length; i++) {
-        lista.innerHTML += `<li class="list">
+                      for (let i = 0; i < d1.length; i++) {
+        lista2.innerHTML += `<li class="list">
     <div style="background-color:${cards[d1[i]].color
           }" class="card" id="${i}" onClick="playCard(${d1[i]} , ${i} , 1)"> 
     <div class="cornerUpDiv">
@@ -843,18 +1118,18 @@ font-family: 'Raleway', sans-serif;
           )}</span></div> 
     </div></li>`;
       }
+      } 
 
-      }
-         if (p2.checked) {
-        for (let i = 0; i < d2.length; i++) {
-        lista2.innerHTML += `<li class="list">
-    <div style="background-color:grey" class="card" id="${i}" onClick=""> 
-    
+
+          if (p2.checked) {
+        for (let i = 0; i < d1.length; i++) {
+        lista.innerHTML += `<li class="list">
+    <div style="background-color:grey" class="cardOp" id="${i}" onClick=""> 
+  ()
+
     </div></li>`;
       }
-      }
-      else{
-           for (let i = 0; i < d2.length; i++) {
+            for (let i = 0; i < d2.length; i++) {
         lista2.innerHTML += `<li class="list">
     <div  style="background-color:${cards[d2[i]].color
           };" class="card" id="${i}" onClick="playCard(${d2[i]} , ${i} , 2)"> 
@@ -879,17 +1154,330 @@ font-family: 'Raleway', sans-serif;
 
       } 
       }
-    
+
+  }
+      if (value == 3) {
+        if (p1.checked) {
+        for (let i = 0; i < d3.length; i++) {
+        lista.innerHTML += `<li class="list">
+    <div style="background-color:grey" class="cardOp" id="${i}" onClick=""> 
+()
+    </div></li>`;
+      }
+
+        for (let i = 0; i < d2.length; i++) {
+        lista3.innerHTML += `<li class="list">
+    <div style="background-color:grey" class="cardOpl" id="${i}" onClick=""> 
+()
+    </div></li>`;
+      }
+               
+                      for (let i = 0; i < d1.length; i++) {
+        lista2.innerHTML += `<li class="list">
+    <div style="background-color:${cards[d1[i]].color
+          }" class="card" id="${i}" onClick="playCard(${d1[i]} , ${i} , 1)"> 
+    <div class="cornerUpDiv">
+    <span id="cornerUp">
+      ${specialCard(
+            cards[d1[i]].number,
+            "u"
+          )}</span> </div>
+       <span> ${specialCard(
+            cards[d1[i]].number,
+            "m"
+          )}
+      </span> 
+    <div class="cornerDownDiv">
+    <span id="cornerDown">${specialCard(
+            cards[d1[i]].number,
+            "d"
+          )}</span></div> 
+    </div></li>`;
+      }
+      } 
+    if (p2.checked) {
+        for (let i = 0; i < d1.length; i++) {
+        lista.innerHTML += `<li class="list">
+    <div style="background-color:grey" class="cardOp" id="${i}" onClick=""> 
+  ()
+
+    </div></li>`;
+      }
+         for (let i = 0; i < d3.length; i++) {
+        lista3.innerHTML += `<li class="list">
+    <div style="background-color:grey" class="cardOpl" id="${i}" onClick=""> 
+  ()
+
+    </div></li>`;
+      }
+            for (let i = 0; i < d2.length; i++) {
+        lista2.innerHTML += `<li class="list">
+    <div  style="background-color:${cards[d2[i]].color
+          };" class="card" id="${i}" onClick="playCard(${d2[i]} , ${i} , 2)"> 
+    <div class="cornerUpDiv">
+    <span id="cornerUp">
+      ${specialCard(
+            cards[d2[i]].number,
+            "u"
+          )}</span> </div>
+       <span> ${specialCard(
+            cards[d2[i]].number,
+            "m"
+          )}
+      </span> 
+    <div class="cornerDownDiv">
+    <span id="cornerDown">${specialCard(
+            cards[d2[i]].number,
+            "d"
+          )}</span></div> 
+    </div></li>`;
+
+
+      } 
+      }
+        
+        if (p3.checked) {
+        for (let i = 0; i < d2.length; i++) {
+        lista.innerHTML += `<li class="list">
+    <div style="background-color:grey" class="cardOp" id="${i}" onClick=""> 
+()
+    </div></li>`;
+      }
+
+            for (let i = 0; i < d1.length; i++) {
+        lista3.innerHTML += `<li class="list">
+    <div style="background-color:grey" class="cardOpl" id="${i}" onClick=""> 
+  ()
+
+    </div></li>`;
+      }
+          
+                      for (let i = 0; i < d3.length; i++) {
+        lista2.innerHTML += `<li class="list">
+    <div style="background-color:${cards[d3[i]].color
+          }" class="card" id="${i}" onClick="playCard(${d3[i]} , ${i} , 3)"> 
+    <div class="cornerUpDiv">
+    <span id="cornerUp">
+      ${specialCard(
+            cards[d3[i]].number,
+            "u"
+          )}</span> </div>
+       <span> ${specialCard(
+            cards[d3[i]].number,
+            "m"
+          )}
+      </span> 
+    <div class="cornerDownDiv">
+    <span id="cornerDown">${specialCard(
+            cards[d3[i]].number,
+            "d"
+          )}</span></div> 
+    </div></li>`;
+      }
+      }
+
+      }
+      if (value == 4) {
+        if (p1.checked) {
+            for (let i = 0; i < d4.length; i++) {
+        lista4.innerHTML += `<li class="list">
+    <div style="background-color:grey" class="cardOpl" id="${i}" onClick=""> 
+()
+    </div></li>`;
+      }
+        for (let i = 0; i < d3.length; i++) {
+        lista.innerHTML += `<li class="list">
+    <div style="background-color:grey" class="cardOp" id="${i}" onClick=""> 
+()
+    </div></li>`;
+      }
+
+        for (let i = 0; i < d2.length; i++) {
+        lista3.innerHTML += `<li class="list">
+    <div style="background-color:grey" class="cardOpl" id="${i}" onClick=""> 
+()
+    </div></li>`;
+      }
+               
+                      for (let i = 0; i < d1.length; i++) {
+        lista2.innerHTML += `<li class="list">
+    <div style="background-color:${cards[d1[i]].color
+          }" class="card" id="${i}" onClick="playCard(${d1[i]} , ${i} , 1)"> 
+    <div class="cornerUpDiv">
+    <span id="cornerUp">
+      ${specialCard(
+            cards[d1[i]].number,
+            "u"
+          )}</span> </div>
+       <span> ${specialCard(
+            cards[d1[i]].number,
+            "m"
+          )}
+      </span> 
+    <div class="cornerDownDiv">
+    <span id="cornerDown">${specialCard(
+            cards[d1[i]].number,
+            "d"
+          )}</span></div> 
+    </div></li>`;
+      }
+      } 
+        if (p2.checked) {
+        for (let i = 0; i < d4.length; i++) {
+        lista.innerHTML += `<li class="list">
+    <div style="background-color:grey" class="cardOp" id="${i}" onClick=""> 
+  ()
+
+    </div></li>`;
+      }
+              for (let i = 0; i < d1.length; i++) {
+        lista4.innerHTML += `<li class="list">
+    <div style="background-color:grey" class="cardOpl" id="${i}" onClick=""> 
+()
+    </div></li>`;
+      }
+         for (let i = 0; i < d3.length; i++) {
+        lista3.innerHTML += `<li class="list">
+    <div style="background-color:grey" class="cardOpl" id="${i}" onClick=""> 
+  ()
+
+    </div></li>`;
+      }
+            for (let i = 0; i < d2.length; i++) {
+        lista2.innerHTML += `<li class="list">
+    <div  style="background-color:${cards[d2[i]].color
+          };" class="card" id="${i}" onClick="playCard(${d2[i]} , ${i} , 2)"> 
+    <div class="cornerUpDiv">
+    <span id="cornerUp">
+      ${specialCard(
+            cards[d2[i]].number,
+            "u"
+          )}</span> </div>
+       <span> ${specialCard(
+            cards[d2[i]].number,
+            "m"
+          )}
+      </span> 
+    <div class="cornerDownDiv">
+    <span id="cornerDown">${specialCard(
+            cards[d2[i]].number,
+            "d"
+          )}</span></div> 
+    </div></li>`;
+
+
+      } 
+      }
+        if (p3.checked) {
+        for (let i = 0; i < d1.length; i++) {
+        lista.innerHTML += `<li class="list">
+    <div style="background-color:grey" class="cardOp" id="${i}" onClick=""> 
+()
+    </div></li>`;
+      }
+
+            for (let i = 0; i < d4.length; i++) {
+        lista3.innerHTML += `<li class="list">
+    <div style="background-color:grey" class="cardOpl" id="${i}" onClick=""> 
+  ()
+
+    </div></li>`;
+      }
+                  for (let i = 0; i < d2.length; i++) {
+        lista4.innerHTML += `<li class="list">
+    <div style="background-color:grey" class="cardOpl" id="${i}" onClick=""> 
+  ()
+
+    </div></li>`;
+      }
+          
+                      for (let i = 0; i < d3.length; i++) {
+        lista2.innerHTML += `<li class="list">
+    <div style="background-color:${cards[d3[i]].color
+          }" class="card" id="${i}" onClick="playCard(${d3[i]} , ${i} , 3)"> 
+    <div class="cornerUpDiv">
+    <span id="cornerUp">
+      ${specialCard(
+            cards[d3[i]].number,
+            "u"
+          )}</span> </div>
+       <span> ${specialCard(
+            cards[d3[i]].number,
+            "m"
+          )}
+      </span> 
+    <div class="cornerDownDiv">
+    <span id="cornerDown">${specialCard(
+            cards[d3[i]].number,
+            "d"
+          )}</span></div> 
+    </div></li>`;
+      }
+      }   
+        if (p4.checked) {
+        for (let i = 0; i < d2.length; i++) {
+        lista.innerHTML += `<li class="list">
+    <div style="background-color:grey" class="cardOp" id="${i}" onClick=""> 
+()
+    </div></li>`;
+      }
+
+            for (let i = 0; i < d1.length; i++) {
+        lista3.innerHTML += `<li class="list">
+    <div style="background-color:grey" class="cardOpl" id="${i}" onClick=""> 
+  ()
+
+    </div></li>`;
+      }
+               for (let i = 0; i < d3.length; i++) {
+        lista4.innerHTML += `<li class="list">
+    <div style="background-color:grey" class="cardOpl" id="${i}" onClick=""> 
+  ()
+
+    </div></li>`;
+      }
+          
+          
+                      for (let i = 0; i < d4.length; i++) {
+        lista2.innerHTML += `<li class="list">
+    <div style="background-color:${cards[d4[i]].color
+          }" class="card" id="${i}" onClick="playCard(${d4[i]} , ${i} , 4)"> 
+    <div class="cornerUpDiv">
+    <span id="cornerUp">
+      ${specialCard(
+            cards[d4[i]].number,
+            "u"
+          )}</span> </div>
+       <span> ${specialCard(
+            cards[d4[i]].number,
+            "m"
+          )}
+      </span> 
+    <div class="cornerDownDiv">
+    <span id="cornerDown">${specialCard(
+            cards[d4[i]].number,
+            "d"
+          )}</span></div> 
+    </div></li>`;
+      }
+      }
+      }
   
-
-
-
-      document.getElementById("lista2").lastChild.scrollIntoView();
-      document.getElementById("lista").lastChild.scrollIntoView();
+    document.getElementById("lista").lastChild.scrollIntoView();
+    document.getElementById("lista2").lastChild.scrollIntoView();
+    document.getElementById("lista3").lastChild.scrollIntoView();
+    document.getElementById("lista4").lastChild.scrollIntoView();
     }
 
-    socket.on('escolha', (color, vf, a3, pile) => {
+    
+    socket.on('exitRoom',()=>{
+      console.log('foi')
+      window.location.replace("/")
+    })
 
+
+    
+    socket.on('escolha', (color, vf, a3, pile) => {
       var visible = "visible";
       var hidden = "hidden";
       var joker = document.getElementById("joker");
@@ -903,8 +1491,8 @@ font-family: 'Raleway', sans-serif;
         joker.style.visibility = hidden;
       }
 
-      game.innerHTML = `${pile}`
 
+      game.innerHTML = `${pile}`
 
     })
 
@@ -916,7 +1504,10 @@ font-family: 'Raleway', sans-serif;
       var circleMain = `<div class="circle"></div>`;
       var circleU = `<div class="circleUD"></div>`;
       var circleD = `<div class="circleUD"></div>`;
-
+        
+    
+  let select = document.getElementById('Idselect')
+       let value = select.options[select.selectedIndex].value;
       if (typeCard == "()") {
         if (U == "u") {
           return circleU;
@@ -930,12 +1521,41 @@ font-family: 'Raleway', sans-serif;
       }
 
       if (typeCard == "@") {
-        if (player == 1) {
+         if (value == 2){
+           if (player == 1) {
           turn = 1
         }
-        if (player == 2) {
+            if (player == 2) {
           turn = 2
         }
+           
+    } if (value == 3){
+           
+           if (player == 1) {
+          turn = 3
+        }
+            if (player == 2) {
+          turn = 1
+        } if (player == 3) {
+          turn = 2
+        }
+         }
+        if (value == 4){
+           
+           if (player == 1) {
+          turn = 3
+        }
+            if (player == 2) {
+          turn = 4
+        } if (player == 3) {
+          turn = 1
+        }
+          if (player == 4) {
+          turn = 2
+        }
+         }
+       
+     
         if (U == "u") {
           return circleUBlock;
         }
@@ -967,14 +1587,24 @@ font-family: 'Raleway', sans-serif;
     socket.on('win',(nome, p) => {
       var play1 = document.getElementById("deck1");
       var play2 = document.getElementById("deck2");
+       var play3 = document.getElementById("deck3");
+      var play4 = document.getElementById("deck4");    
+      var dk = document.getElementById("dk");
+
       if(p == 1){
-        play1.innerHTML = `<h2 id="win">O player: ${nome} ganhou a partida!!!</h2>`
-      }else{
-        play2.innerHTML = `<h2 id="win">O player: ${nome} ganhou a partida!!!</h2>`
+        dk.innerHTML = `<h2 id="win">O player: ${nome} ganhou a partida!!!</h2>`
+      }
+       else if(p == 2){
+        dk.innerHTML = `<h2 id="win">O player: ${nome} ganhou a partida!!!</h2>`
+      }else if(p == 3){
+          dk.innerHTML = `<h2 id="win">O player: ${nome} ganhou a partida!!!</h2>`
+      }
+       else{
+        dk.innerHTML = `<h2 id="win">O player: ${nome} ganhou a partida!!!</h2>`
       }
     })
     
-    socket.on('start', (d1,d2, u, p, users) => {
+    socket.on('start', (d1,d2,d3,d4, u, p, users) => {
          
       var startbtn = document.getElementById('btnStart');
       var sala = document.getElementById('sala');
@@ -985,8 +1615,12 @@ font-family: 'Raleway', sans-serif;
       var Info = document.getElementById('playerInfo');
       var lista2 = document.getElementById("lista2");
       var lista = document.getElementById("lista");
+      var lista2 = document.getElementById("lista3");
+      var lista = document.getElementById("lista4");
       lista2.innerHTML = "";
       lista.innerHTML = "";
+      lista3.innerHTML = "";
+      lista4.innerHTML = "";
       game.innerHTML = `${u}`
       console.log(p) 
       var visible = "visible";
@@ -1003,26 +1637,30 @@ font-family: 'Raleway', sans-serif;
       for (let i = 0; i <= users.length; i++) {
         
         if (users[i] != null) {
-           listPlayer.innerHTML += `<li>${users[i].nome}</li></br>`
+           listPlayer.innerHTML += `<li>${users[i].nome} 🟢</li></br>`
         }
        
       }
 
-     show(d1,d2)
+     show(d1,d2,d3,d4)
    
     })
 
     function chooseColor(color, vf, scram) {
+      var joker =  document.getElementById('joker');
+      joker.style.visibility = 'visible'
+      var show = 'hidden';
+      joker.style.visibility =  show;
       socket.emit('chooseColor', color, vf, scram)
     }
 
     function playCard(scram, id, player) {
     
-
-      
+      console.log(scram)
+      console.log(id)
+      console.log(player)
       socket.emit('play', scram, id, player, sala.value)
-            
-      
+                
 
     }
 
@@ -1030,12 +1668,9 @@ font-family: 'Raleway', sans-serif;
       socket.emit('push')
     }
 
-    socket.on('showCard', (d1, d2, pile, turn,users) => {
+    socket.on('showCard', (d1, d2, d3,d4 ,pile, turn,users) => {
       var game = document.getElementById('game');
-      var lista2 = document.getElementById("lista2");
-      lista2.innerHTML = "";
-      var lista = document.getElementById("lista");
-      lista.innerHTML = "";
+      playerInfo.style.opacity = '0.5';
       playerInfo.textContent = "Vez de: " + turn
       console.log(pile);
       game.innerHTML = `${pile}`
@@ -1050,7 +1685,7 @@ font-family: 'Raleway', sans-serif;
        
       }
 
-      show(d1,d2)
+      show(d1,d2,d3,d4)
 
 
     })
