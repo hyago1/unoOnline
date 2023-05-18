@@ -20,16 +20,37 @@
 
 
   <style>
+    @keyframes pulsar {
+    0% {
+        transform: scale(0.1);
+        opacity: 0;
+    }
     
+    50% {
+        opacity: 1;
+    }
+    
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
     body {
       background-color: #120d19;
 
     
     }
+    .enterRoomDiv{
+      background-color:red
+    }
     select{
+      background-color:#183d59;
+      border-radius:8px;
+      border:2px solid #0b2538;
       margin:10px;
+      width:30%;
       padding:5px;
-      border:none;
+
     }
      select:focus {
        padding:5px;
@@ -52,15 +73,13 @@
 
     #btnStart,
     #sala {
-      padding: 15px;
-    
-      cursor: pointer;
+      padding: 15px;  
 
     }
 
     .divStartReset {
       width: 90%;
-      height: 90%;
+
       flex-direction: column;
       position: absolute;
       display: flex;
@@ -497,6 +516,7 @@ font-family: 'Raleway', sans-serif;
       color:white;
      width:60%;
        border-radius:5px;
+     cursor:pointer;
 
     }
     .btnStart:hover{
@@ -516,7 +536,7 @@ font-family: 'Raleway', sans-serif;
       display:flex;
       justify-content:center;
      
-      width:18em;
+      width:auto;
     }
     #cardOponent{
       width:100%;
@@ -576,8 +596,10 @@ font-family: 'Raleway', sans-serif;
       visibility:hidden;
     }
     .check{
+      
       display: flex;
-    align-items: center;
+      justify-content:space-between;
+      align-items: center;
       padding:2px;
       background-color:#12334b;
       color:white;
@@ -595,12 +617,56 @@ font-family: 'Raleway', sans-serif;
 }
 
     .checkbox{
-      padding:20px;
+    color:red;
+    margin: 5px;
+    width: 20px;
+    height: 20px;
+
     }
-
+    #createdRoom{
+      visibility:hidden;
+      display: flex;
+      justify-content:space-between;
+      align-items:center;
+      text-align:center;
+      width:18em;
+      border-radius:5px;
+      background-color:#1d0b36;
+      margin:10px;
       
-
-
+    }
+    .createdRoom button{
+      padding:5px;
+      background-color:#1d0b36;
+      border:2px solid#2e1652;
+      border-radius:5px;
+      color:white;
+      cursor:pointer;
+    }
+    
+    .createdRoom span{
+      margin:10px;
+      color:white;
+    }
+    .btnSearch{
+    margin:8px;
+    background-color:#1d0b36;
+    cursor:pointer;
+    height:20px;
+    width:20px;
+    color:white;
+    padding:5px;
+    }
+    .check div{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
+    .check span{
+      margin:5px;
+    }
+    .on{
+      visibility:hidden;
     }
 
   </style>
@@ -633,30 +699,43 @@ font-family: 'Raleway', sans-serif;
     </div>
     <div class="divStartReset" id="sala">
       
-      <div class="create" id="createSala">
+      <div>
+             <div class="create" id="createSala">
         <div id="checks">
+         <div style="display:flex; align-items:center;justify-content:space-between;"> <label>N. de jogadores</label>
       <select id="Idselect" >
-        <option value="2">2 players</option>
-        <option value="3" >3 players</option>
-        <option value="4">4 players</option>   
-      </select>
-          <div>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option> 
+      </select></div>
+          <div class="divchecks">
                 <div id="dp1" class="check">
-    <input type="checkbox" class="checkbox" id="p1" />
- 
-      <label>Player 1</label>
+      <div>
+         <input type="checkbox" class="checkbox"  id="p1" />
+      <label>Player 1/Criador</label>
+      </div>
+
             </div>
     <div id="dp2" class="check">
-    <input type="checkbox" class="checkbox"  id="p2" />
+      <div>
+         <input type="checkbox" class="checkbox" onclick="hiddenRoomName()"  id="p2" />
       <label>Player 2</label>
-            </div>
+      </div>
+   <span id="on2" class="on">on</span>
+    </div>
             <div id="dp3" class="check">
-    <input type="checkbox"  class="checkbox"  id="p3" />
+      <div>
+         <input type="checkbox" class="checkbox" onclick="hiddenRoomName()"  id="p3" />
       <label>Player 3</label>
+      </div>
+   <span id="on3" class="on">on</span>
             </div>
             <div id="dp4" class="check">
-    <input type="checkbox" class="checkbox"  id="p4" />
+     <div>
+         <input type="checkbox" class="checkbox" onclick="hiddenRoomName()"  id="p4" />
       <label>Player 4</label>
+      </div>
+   <span id="on4" class="on">on</span>
             </div>
 
             
@@ -671,7 +750,24 @@ font-family: 'Raleway', sans-serif;
          
       </div>
  <div class="divBtn" >
-        <input type="button" class="btnStart" id="btnStart" onClick="startCreate()" value="Pronto" />
+        <input type="button" class="btnStart" id="btnStart" onClick="startCreate()" value="Criar Sala" />
+      </div>
+      </div>
+
+      <div class=¨enterRoomDiv¨>
+
+
+      <div>
+              <span onClick="searchRoom()" class="btnSearch">  ↓ Sala criada ↓     </span>
+        
+      </div>
+      </div>
+    
+      
+
+      <div class="createdRoom" id="createdRoom">
+        <span id="nameRoomEnter"></span>
+        <button   onClick="beforeEnterRoom()">Enter</button>
       </div>
     </div>
 
@@ -714,7 +810,8 @@ font-family: 'Raleway', sans-serif;
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
-
+    
+    
       swal({
     text: "Selecione qual player voce é",
     icon: "warning",
@@ -996,12 +1093,24 @@ font-family: 'Raleway', sans-serif;
     var waitList = document.getElementById('waitList')
     var userNameSala = document.getElementById("userNameSala")
     var userNameUs = document.getElementById("userNameUs")
-    
+
+
+    function hiddenRoomName() {
+      var none = "none";
+      var check = "true";
+
+    var userNameSala = document.getElementById("userNameSala")
+    userNameSala.style.display = none;
+    var btnStart = document.getElementById("btnStart")
+    var none = "none";
+    btnStart.style.display = none;
+    searchRoom()
+}
 
  document.querySelector('select').addEventListener('change', function(){
 
 
-  var visible = "block";
+  var visible = "flex";
   var none = "none";
   var check = "true"
   var dp2= document.getElementById("dp2");
@@ -1009,7 +1118,7 @@ font-family: 'Raleway', sans-serif;
   var dp4 = document.getElementById("dp4");
   let select = document.getElementById('Idselect')
   let value = select.options[select.selectedIndex].value;
-   
+
 console.log(value)
     if(value == 2){
 
@@ -1033,7 +1142,32 @@ console.log(value)
 });
 
 
+    
+      function searchRoom(){
+        console.log("procurando....")
+        socket.emit('searchRoom')
+      }
+    
+    function beforeEnterRoom(p) {
+  if(p2.checked){
+       socket.emit('verificationUsers',2)
+  }else if(p3.checked){
+       socket.emit('verificationUsers',3)
+  }else if(p4.checked){
+       socket.emit('verificationUsers',4)
+  }
+   
+   
+   
+    }
+  
+
     function startCreate() {
+      
+  var createdRoom = document.getElementById("createdRoom")
+  var visible = "visible";
+  var hidden = "hidden";
+  createdRoom.style.visibility = hidden;
   let select = document.getElementById('Idselect')
   let value = select.options[select.selectedIndex].value;
         if ( userNameUs.value == "" || userNameSala.value == "" ) {
@@ -1045,14 +1179,17 @@ console.log(value)
   })
           
      
+      }else if(!p1.checked && !p2.checked && !p3.checked && !p4.checked){
+          
+          alert("Selecione um player")
       }
         else{
 
     if(value == 2){
-   socket.emit('start', userNameUs.value , userNameSala.value , 2)
+    socket.emit('start', userNameUs.value , userNameSala.value , 2)
    }
     if(value == 3){
- socket.emit('start', userNameUs.value , userNameSala.value, 3 )
+    socket.emit('start', userNameUs.value , userNameSala.value, 3 )
    }
     if(value == 4){
     socket.emit('start', userNameUs.value , userNameSala.value , 4)
@@ -1062,10 +1199,6 @@ console.log(value)
 
       }
     }
-
-
-
-    
 
     function show(d1,d2,d3,d4, name) {
 
@@ -1085,7 +1218,7 @@ console.log(value)
     
       let select = document.getElementById('Idselect')
       let value = select.options[select.selectedIndex].value;
-
+      console.log("mostrando..")
 
       if (value == 2) {
    
@@ -1469,14 +1602,86 @@ console.log(value)
     document.getElementById("lista4").lastChild.scrollIntoView();
     }
 
+
+    function enterRoom() {
+        let select = document.getElementById('Idselect')
+    let value = select.options[select.selectedIndex].value;
+      var nameRoomEnter = document.getElementById("nameRoomEnter");
+      console.log(nameRoomEnter.innerText)
+              
+        if ( userNameUs.value == "" ) {
+         
+              swal({
+    text: "Digite seu nome",
+    icon: "warning",
+    button: "Ok",
+  })
+          
+     
+      }else if(!p1.checked && !p2.checked && !p3.checked && !p4.checked){
+          
+          alert("Selecione um player")
+      }else{
+    if(value == 2){
+      if(nameRoomEnter.innerText != "-"){
+           socket.emit('start', userNameUs.value , nameRoomEnter.innerText , 2)
+      }
+   }
+    if(value == 3){
+      if(nameRoomEnter.innerText != "-"){
+ socket.emit('start', userNameUs.value , nameRoomEnter.innerText , 3 )
+      }
+   }
+    if(value == 4){
+      if(nameRoomEnter.innerText != "-"){
+    socket.emit('start', userNameUs.value , nameRoomEnter.innerText , 4)
+      }
+
+   }
+      }
+           var createdRoom = document.getElementById("createdRoom")
+           var visible = "visible";
+      var hidden = "hidden";
+      createdRoom.style.visibility = hidden;
+
+    }
+
+    socket.on('verificationUsers',(p, vorf)=>{
+        if(vorf){
+           alert("O player "+ p+" Ja está na sala ")
+        
+        }else{
+          enterRoom()
+        }
+       
+      })
+
+
+    
+    socket.on('showRoom' ,(showR) =>{
+      console.log(">>>>>>>>>>>>>>>>>>>>>"+showR)
+                  var nameRoomEnter = document.getElementById("nameRoomEnter")
+ 
+                   var createdRoom = document.getElementById("createdRoom")
+           var visible = "visible";
+      var hidden = "hidden";
+      createdRoom.style.visibility = visible;
+      if(showR != null){
+              nameRoomEnter.textContent = showR
+      }else{
+         nameRoomEnter.textContent = "-"
+
+           
+      }
+
+            console.log(nameRoomEnter.innerText)
+    } )
     
     socket.on('exitRoom',()=>{
       console.log('foi')
       window.location.replace("/")
     })
 
-
-    
     socket.on('escolha', (color, vf, a3, pile) => {
       var visible = "visible";
       var hidden = "hidden";
@@ -1495,7 +1700,6 @@ console.log(value)
       game.innerHTML = `${pile}`
 
     })
-
 
     function specialCard(typeCard, U, player) {
       var circleMainBlock = `<div class="circleBlock"><div class="diagonal"></div></div>`;
@@ -1570,10 +1774,9 @@ console.log(value)
       return typeCard;
     }
 
-
     socket.on('showPlayersOn',(users)=>{
         var listPlayer = document.getElementById('list');
-
+  listPlayer.innerHTML = ''
         for (let i = 0; i <= users.length; i++) {
         
         if (users[i] != null) {
@@ -1582,7 +1785,6 @@ console.log(value)
        
       }
 })
-
 
     socket.on('win',(nome, p) => {
       var play1 = document.getElementById("deck1");
@@ -1617,14 +1819,22 @@ console.log(value)
       var lista = document.getElementById("lista");
       var lista2 = document.getElementById("lista3");
       var lista = document.getElementById("lista4");
+      var on2 = document.getElementById("on2");
+      var on3 = document.getElementById("on3");
+      var on4 = document.getElementById("on4");
+      var createdRoom = document.getElementById("createdRoom")
+      var visible = "visible";
+      var hidden = "hidden";
+      createdRoom.style.visibility = hidden;
       lista2.innerHTML = "";
       lista.innerHTML = "";
       lista3.innerHTML = "";
       lista4.innerHTML = "";
       game.innerHTML = `${u}`
+      console.log("fooi")
       console.log(p) 
       var visible = "visible";
-      var hidden = "hidden";
+      var hidden = "hidden";  
       listPlayerDiv.style.visibility = visible;
       Info.style.visibility = visible;
       push.style.visibility = visible;
@@ -1633,9 +1843,9 @@ console.log(value)
 
       playerInfo.textContent = "Vez de: " + p
       listPlayer.innerHTML = "";
-      
+         
       for (let i = 0; i <= users.length; i++) {
-        
+        var usuOn = 0;
         if (users[i] != null) {
            listPlayer.innerHTML += `<li>${users[i].nome} 🟢</li></br>`
         }
@@ -1659,18 +1869,30 @@ console.log(value)
       console.log(scram)
       console.log(id)
       console.log(player)
-      socket.emit('play', scram, id, player, sala.value)
-                
+
+   
+         socket.emit('play', scram, id, player, sala.value)
+      
+               
 
     }
 
+     socket.on('nTurn',() => {
+                  alert("não é sua vez")
+                })
+
     function push() {
-      socket.emit('push')
+
+       socket.emit('push')
+    
+      
+     
     }
 
     socket.on('showCard', (d1, d2, d3,d4 ,pile, turn,users) => {
       var game = document.getElementById('game');
-      playerInfo.style.opacity = '0.5';
+      var pulsar = "pulsar" 
+      playerInfo.style.animation = pulsar;
       playerInfo.textContent = "Vez de: " + turn
       console.log(pile);
       game.innerHTML = `${pile}`

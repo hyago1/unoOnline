@@ -36,6 +36,7 @@ server.listen(3000, () => {
 var p = 10;
 
 
+
 const cards = [
   {
     cod: "B+4",
@@ -350,11 +351,12 @@ var turn = 1;
 var idPlayer
 idPlayer = 0
 
+var userOn = false
 
 var rooms = []
 
-
-
+var firstPlayer = false;
+console.log(firstPlayer)
 
 function createGame() {
 
@@ -446,11 +448,11 @@ function specialCard(typeCard, U, player) {
   if (typeCard == "@") {
     if (p2) {
       if (player == 1) {
-    names =  users[0].nome
+        names = users[0].nome
         turn = 1
       }
       if (player == 2) {
-            names =  users[1].nome
+        names = users[1].nome
         turn = 2
       }
 
@@ -458,32 +460,32 @@ function specialCard(typeCard, U, player) {
     if (p3) {
 
       if (player == 1) {
-            names =  users[2].nome
+        names = users[2].nome
         turn = 3
       }
       if (player == 2) {
-            names =  users[0].nome
+        names = users[0].nome
         turn = 1
       } if (player == 3) {
-            names =  users[1].nome
+        names = users[1].nome
         turn = 2
       }
     }
     if (p4) {
 
       if (player == 1) {
-            names =  users[2].nome
+        names = users[2].nome
         turn = 3
       }
       if (player == 2) {
-            names =  users[3].nome
+        names = users[3].nome
         turn = 4
       } if (player == 3) {
-            names =  users[0].nome
+        names = users[0].nome
         turn = 1
       }
       if (player == 4) {
-            names =  users[1].nome
+        names = users[1].nome
         turn = 2
       }
     }
@@ -552,68 +554,6 @@ function verificationCard(scram) {
   return validation;
 }
 
-function joker(color, vf, sc) {
-
-  var pileJ = `
-  <div  style="background-color:${color};" class="card"  > 
-  <div class="cornerUpDiv">
-  <span id="cornerUp"> ${jokerCard.number}</span> </div> <span> ${jokerCard.number}</span> 
-  <div class="cornerDownDiv">
-  <span id="cornerDown"> ${jokerCard.number}</span></div> 
-  </div>`;
-
-  io.in(roomName).emit('escolha', color, vf, sc, pileJ)
-}
-
-function addFourCards(player, id) {
-  if (p2) {
-    if (player == 2) {
-      scramble.length = scramble.length + 4;
-      addCardsInDeck(1)
-    }
-    if (player == 1) {
-      scramble2.length = scramble2.length + 4;
-      addCardsInDeck(2)
-    }
-  }
-  if (p3) {
-    if (player == 1) {
-      scramble2.length = scramble2.length + 4;
-      addCardsInDeck(2)
-    }
-    if (player == 2) {
-      scramble3.length = scramble3.length + 4;
-      addCardsInDeck(3)
-    }
-
-    if (player == 3) {
-      scramble.length = scramble.length + 4;
-      addCardsInDeck(1)
-    }
-  }
-  if (p4) {
-    if (player == 1) {
-      scramble2.length = scramble2.length + 4;
-      addCardsInDeck(2)
-    }
-    if (player == 2) {
-      scramble3.length = scramble3.length + 4;
-      addCardsInDeck(3)
-    }
-
-    if (player == 3) {
-      scramble4.length = scramble4.length + 4;
-      addCardsInDeck(4)
-    }
-    if (player == 4) {
-      scramble.length = scramble.length + 4;
-      addCardsInDeck(1)
-    }
-  }
-
-  joker("#0f0f0f", true, 2)
-
-}
 
 function addTwoCards(player, id) {
   if (p2) {
@@ -677,13 +617,46 @@ function nOfUsers() {
 }
 
 io.on('connection', (socket) => {
+  io.in(roomName).emit('showPlayersOn', users)
   console.log("Num de users>>>>>>>>>> " + nOfUsers())
 
   console.log("conection aqui")
   console.log(socket.id)
   console.log(users)
+  socket.on('searchRoom', () => {
+    socket.emit('showRoom', rooms[0])
+  })
+
+  socket.on('verificationUsers', (p) => {
+    console.log("chegou " + p)
+    let val = false;
+    for (let i = 0; i < users.length; i++) {
+      if (users[i] != null) {
+        console.log(i + 1)
+        console.log(i)
+        if (i + 1 == p) {
+          socket.emit('verificationUsers', p, true)
+          val = true
+
+          break;
+        }
+        val = false
+
+
+
+      }
+    }
+    if (!val) {
+      socket.emit('verificationUsers', p, false)
+      console.log("nada")
+    }
+
+
+
+  });
 
   socket.on('start', (usu, namOfRoom, match) => {
+
     console.log(">>>>>>>>>> " + usu)
     console.log(">>>>>>>>>> " + namOfRoom)
     console.log("tipo de partida >>: " + match)
@@ -713,17 +686,18 @@ io.on('connection', (socket) => {
           console.log(user)
           users.push(user)
           console.log("Num de users>>>>>>>>>> " + nOfUsers())
-
+          userOn = true
           console.log("criou a sala");
           rooms.push(namOfRoom)
           socket.join(namOfRoom)
           createGame();
           pile = pileStart
 
-
+          io.emit('showRoom', namOfRoom)
           io.in(namOfRoom).emit('start', scramble, scramble2, scramble3, scramble4, pileStart, users[0].nome, users)
 
           if (nOfUsers() == 1) {
+            console.log("so tem o criador")
             setTimeout(reset, 40000)
           }
           break
@@ -743,6 +717,7 @@ io.on('connection', (socket) => {
           socket.join(namOfRoom)
           io.in(namOfRoom).emit('start', scramble, scramble2, scramble3, scramble4, pileStart, users[0].nome, users)
           if (nOfUsers() == 1) {
+            console.log("so tem 1")
             setTimeout(reset, 40000)
           }
           break
@@ -755,12 +730,71 @@ io.on('connection', (socket) => {
 
   })
 
+  function joker(color, vf, sc) {
 
+  var pileJ = `
+  <div  style="background-color:${color};" class="card"  > 
+  <div class="cornerUpDiv">
+  <span id="cornerUp"> ${jokerCard.number}</span> </div> <span> ${jokerCard.number}</span> 
+  <div class="cornerDownDiv">
+  <span id="cornerDown"> ${jokerCard.number}</span></div> 
+  </div>`;
+    
+ io.in(roomName).emit('showCard', scramble, scramble2, scramble3, scramble4, pile, names, users)
+    
+  socket.emit('escolha', color, vf, sc, pileJ)
+}
 
+  function addFourCards(player, id) {
+  if (p2) {
+    if (player == 2) {
+      scramble.length = scramble.length + 4;
+      addCardsInDeck(1)
+    }
+    if (player == 1) {
+      scramble2.length = scramble2.length + 4;
+      addCardsInDeck(2)
+    }
+  }
+  if (p3) {
+    if (player == 1) {
+      scramble2.length = scramble2.length + 4;
+      addCardsInDeck(2)
+    }
+    if (player == 2) {
+      scramble3.length = scramble3.length + 4;
+      addCardsInDeck(3)
+    }
 
+    if (player == 3) {
+      scramble.length = scramble.length + 4;
+      addCardsInDeck(1)
+    }
+  }
+  if (p4) {
+    if (player == 1) {
+      scramble2.length = scramble2.length + 4;
+      addCardsInDeck(2)
+    }
+    if (player == 2) {
+      scramble3.length = scramble3.length + 4;
+      addCardsInDeck(3)
+    }
 
+    if (player == 3) {
+      scramble4.length = scramble4.length + 4;
+      addCardsInDeck(4)
+    }
+    if (player == 4) {
+      scramble.length = scramble.length + 4;
+      addCardsInDeck(1)
+    }
+  }
 
+  joker("#0f0f0f", true, 2)
 
+}
+  
   function reset() {
     if (nOfUsers() == 1) {
       names = ""
@@ -768,6 +802,7 @@ io.on('connection', (socket) => {
       socket.leave(roomName)
       roomName = ""
       rooms = []
+      io.emit('showRoom', rooms[0]);
       scramble = new Array();
       scramble.length = 7
       scramble2 = new Array();
@@ -792,9 +827,8 @@ io.on('connection', (socket) => {
 
   }
 
-
-
   socket.on("disconnect", (reason) => {
+    io.in(roomName).emit('showPlayersOn', users)
     let id = null;
     for (var i = 0; i <= users.length; i++) {
       if (users[i] != null) {
@@ -814,10 +848,6 @@ io.on('connection', (socket) => {
       users.splice(id, 1)
     }
 
-    if (nOfUsers() == 1) {
-      console.log("só tem 1")
-      setTimeout(reset, 25000)
-    }
 
     console.log(users)
     if (nOfUsers() == 0) {
@@ -827,6 +857,8 @@ io.on('connection', (socket) => {
       socket.leave(roomName)
       roomName = ""
       rooms = []
+      io.emit('showRoom', rooms[0])
+
       scramble = new Array();
       scramble.length = 7
       scramble2 = new Array();
@@ -849,11 +881,6 @@ io.on('connection', (socket) => {
     io.in(roomName).emit('showPlayersOn', users)
 
   });
-
-
-
-
-
 
   socket.on('chooseColor', (color, vf, scram) => {
     lastColor = color;
@@ -903,20 +930,19 @@ io.on('connection', (socket) => {
   socket.on('play', (scram, id, player) => {
 
 
-
     validation = false;
 
     if (player == turn) {
-
+      firstPlayer = true
 
       if (verificationCard(scram) == true) {
 
-        console.log("mmmm>>"+scram)
+        console.log("mmmm>>" + scram)
 
         if (p2) {
           if (player == 1) {
             if (users[1] != null) {
-              
+
               names = users[1].nome
             }
             else {
@@ -1084,23 +1110,33 @@ io.on('connection', (socket) => {
       }
 
     }
+    else {
 
-    if (scramble.length == 0) {
-      io.in(roomName).emit('win', users[0].nome, "1")
+      if (!firstPlayer) {
+
+        socket.emit('nTurn')
+      }
+
     }
-    if (scramble2.length == 0) {
-      io.in(roomName).emit('win', users[1].nome, "2")
+    if (firstPlayer) {
+      if (scramble.length == 0) {
+        io.in(roomName).emit('win', users[0].nome, "1")
+      }
+      if (scramble2.length == 0) {
+        io.in(roomName).emit('win', users[1].nome, "2")
+      }
+      if (scramble3.length == 0) {
+        io.in(roomName).emit('win', users[2].nome, "3")
+      }
+      if (scramble4.length == 0) {
+        io.in(roomName).emit('win', users[3].nome, "4")
+      }
+      io.in(roomName).emit('showCard', scramble, scramble2, scramble3, scramble4, pile, names, users)
     }
-    if (scramble3.length == 0) {
-      io.in(roomName).emit('win', users[2].nome, "3")
-    }
-    if (scramble4.length == 0) {
-      io.in(roomName).emit('win', users[3].nome, "4")
-    }
-    io.in(roomName).emit('showCard', scramble, scramble2, scramble3, scramble4, pile, names, users)
+
+
 
   })
-
 
 });
 
