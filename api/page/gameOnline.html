@@ -668,6 +668,18 @@ font-family: 'Raleway', sans-serif;
     .on{
       visibility:hidden;
     }
+    .btnExit{
+    background-color: #120d19;
+    border:2px solid #1e4867;
+    color:white;
+    border-radius:5px;
+    cursor: pointer;
+    margin: 5px;
+    font-size: 20px;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    padding:20px;
+    }
+    
 
   </style>
   
@@ -687,7 +699,6 @@ font-family: 'Raleway', sans-serif;
     <div class="decks" >
         <span class="spanP" id="spanP1">player</span>
       
-     
     <div class="ulDeck" id="deck1">
       <ul id="lista"></ul>
  
@@ -1141,9 +1152,11 @@ console.log(value)
    
 });
 
-
+    socket.on('msg',(req) =>{
+      alert(req)
+    } )
     
-      function searchRoom(){
+    function searchRoom(){
         console.log("procurando....")
         socket.emit('searchRoom')
       }
@@ -1161,7 +1174,6 @@ console.log(value)
    
     }
   
-
     function startCreate() {
       
   var createdRoom = document.getElementById("createdRoom")
@@ -1602,7 +1614,6 @@ console.log(value)
     document.getElementById("lista4").lastChild.scrollIntoView();
     }
 
-
     function enterRoom() {
         let select = document.getElementById('Idselect')
     let value = select.options[select.selectedIndex].value;
@@ -1656,8 +1667,6 @@ console.log(value)
        
       })
 
-
-    
     socket.on('showRoom' ,(showR) =>{
       console.log(">>>>>>>>>>>>>>>>>>>>>"+showR)
                   var nameRoomEnter = document.getElementById("nameRoomEnter")
@@ -1775,34 +1784,41 @@ console.log(value)
     }
 
     socket.on('showPlayersOn',(users)=>{
-        var listPlayer = document.getElementById('list');
-  listPlayer.innerHTML = ''
+      var listPlayer = document.getElementById('list');
+      listPlayer.innerHTML = ''
+      console.log(users)
         for (let i = 0; i <= users.length; i++) {
         
         if (users[i] != null) {
-           listPlayer.innerHTML = `<li>${users[i].nome}</li>`
+              console.log(' ai slg '+users[i].nome)
+           listPlayer.innerHTML += `<li>${users[i].nome}</li>`
         }
        
       }
 })
 
+
+    function exit() {
+      socket.emit('exit')
+    }
+    
     socket.on('win',(nome, p) => {
       var play1 = document.getElementById("deck1");
       var play2 = document.getElementById("deck2");
-       var play3 = document.getElementById("deck3");
+      var play3 = document.getElementById("deck3");
       var play4 = document.getElementById("deck4");    
       var dk = document.getElementById("dk");
 
       if(p == 1){
-        dk.innerHTML = `<h2 id="win">O player: ${nome} ganhou a partida!!!</h2>`
+        dk.innerHTML = `<h2 id="win">O player: ${nome} ganhou a partida!!!</h2><button class="btnExit"  onClick="exit()">Sair</button>`
       }
        else if(p == 2){
-        dk.innerHTML = `<h2 id="win">O player: ${nome} ganhou a partida!!!</h2>`
+        dk.innerHTML = `<h2 id="win">O player: ${nome} ganhou a partida!!!</h2><button class="btnExit"  onClick="exit()">Sair</button>`
       }else if(p == 3){
-          dk.innerHTML = `<h2 id="win">O player: ${nome} ganhou a partida!!!</h2>`
+          dk.innerHTML = `<h2 id="win">O player: ${nome} ganhou a partida!!!</h2><button  class="btnExit"  onClick="exit()">Sair</button>`
       }
        else{
-        dk.innerHTML = `<h2 id="win">O player: ${nome} ganhou a partida!!!</h2>`
+        dk.innerHTML = `<h2 id="win">O player: ${nome} ganhou a partida!!!</h2><button class="btnExit"  onClick="exit()">Sair</button>`
       }
     })
     
@@ -1847,7 +1863,7 @@ console.log(value)
       for (let i = 0; i <= users.length; i++) {
         var usuOn = 0;
         if (users[i] != null) {
-           listPlayer.innerHTML += `<li>${users[i].nome} 🟢</li></br>`
+           listPlayer.innerHTML += `<li>${users[i].nome}🟢</li></br>`
         }
        
       }
@@ -1885,8 +1901,6 @@ console.log(value)
 
        socket.emit('push')
     
-      
-     
     }
 
     socket.on('showCard', (d1, d2, d3,d4 ,pile, turn,users) => {

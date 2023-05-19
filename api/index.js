@@ -554,7 +554,6 @@ function verificationCard(scram) {
   return validation;
 }
 
-
 function addTwoCards(player, id) {
   if (p2) {
     if (player == 2) {
@@ -732,69 +731,76 @@ io.on('connection', (socket) => {
 
   function joker(color, vf, sc) {
 
-  var pileJ = `
+    var pileJ = `
   <div  style="background-color:${color};" class="card"  > 
   <div class="cornerUpDiv">
   <span id="cornerUp"> ${jokerCard.number}</span> </div> <span> ${jokerCard.number}</span> 
   <div class="cornerDownDiv">
   <span id="cornerDown"> ${jokerCard.number}</span></div> 
   </div>`;
-    
- io.in(roomName).emit('showCard', scramble, scramble2, scramble3, scramble4, pile, names, users)
-    
-  socket.emit('escolha', color, vf, sc, pileJ)
-}
+
+    io.in(roomName).emit('showCard', scramble, scramble2, scramble3, scramble4, pile, names, users)
+
+    socket.emit('escolha', color, vf, sc, pileJ)
+  }
 
   function addFourCards(player, id) {
-  if (p2) {
-    if (player == 2) {
-      scramble.length = scramble.length + 4;
-      addCardsInDeck(1)
+    if (p2) {
+      if (player == 2) {
+        scramble.length = scramble.length + 4;
+        addCardsInDeck(1)
+      }
+      if (player == 1) {
+        scramble2.length = scramble2.length + 4;
+        addCardsInDeck(2)
+      }
     }
-    if (player == 1) {
-      scramble2.length = scramble2.length + 4;
-      addCardsInDeck(2)
+    if (p3) {
+      if (player == 1) {
+        scramble2.length = scramble2.length + 4;
+        addCardsInDeck(2)
+      }
+      if (player == 2) {
+        scramble3.length = scramble3.length + 4;
+        addCardsInDeck(3)
+      }
+
+      if (player == 3) {
+        scramble.length = scramble.length + 4;
+        addCardsInDeck(1)
+      }
     }
+    if (p4) {
+      if (player == 1) {
+        scramble2.length = scramble2.length + 4;
+        addCardsInDeck(2)
+      }
+      if (player == 2) {
+        scramble3.length = scramble3.length + 4;
+        addCardsInDeck(3)
+      }
+
+      if (player == 3) {
+        scramble4.length = scramble4.length + 4;
+        addCardsInDeck(4)
+      }
+      if (player == 4) {
+        scramble.length = scramble.length + 4;
+        addCardsInDeck(1)
+      }
+    }
+
+    joker("#0f0f0f", true, 2)
+
   }
-  if (p3) {
-    if (player == 1) {
-      scramble2.length = scramble2.length + 4;
-      addCardsInDeck(2)
-    }
-    if (player == 2) {
-      scramble3.length = scramble3.length + 4;
-      addCardsInDeck(3)
-    }
 
-    if (player == 3) {
-      scramble.length = scramble.length + 4;
-      addCardsInDeck(1)
-    }
-  }
-  if (p4) {
-    if (player == 1) {
-      scramble2.length = scramble2.length + 4;
-      addCardsInDeck(2)
-    }
-    if (player == 2) {
-      scramble3.length = scramble3.length + 4;
-      addCardsInDeck(3)
-    }
+  socket.on('exit', () => {
 
-    if (player == 3) {
-      scramble4.length = scramble4.length + 4;
-      addCardsInDeck(4)
-    }
-    if (player == 4) {
-      scramble.length = scramble.length + 4;
-      addCardsInDeck(1)
-    }
-  }
+    io.emit('exitRoom')
 
-  joker("#0f0f0f", true, 2)
+  })
 
-}
-  
+
   function reset() {
     if (nOfUsers() == 1) {
       names = ""
@@ -837,15 +843,14 @@ io.on('connection', (socket) => {
 
           break
         }
-
-
       }
     }
 
     if (id != null) {
       console.log("deletando o socket: " + socket.id)
-      io.in(roomName).emit('showPlayersOn', users)
+
       users.splice(id, 1)
+      io.in(roomName).emit('showPlayersOn', users)
     }
 
 
