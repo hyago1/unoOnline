@@ -44,6 +44,7 @@
       background-color:red
     }
     select{
+          color: white;
       background-color:#183d59;
       border-radius:8px;
       border:2px solid #0b2538;
@@ -474,6 +475,7 @@ box-shadow: 3px 50px 47px -4px #000000;
     }
 
     .create {
+          color: white;
       background-color:#183d59;
       width: 17em;
       height: auto;
@@ -680,7 +682,12 @@ font-family: 'Raleway', sans-serif;
     padding:20px;
     }
     
-
+.divchecks{
+  margin-bottom:10px;
+}
+    h2{
+      margin:8px;
+    }
   </style>
   
   <title>Uno Minimalista</title>
@@ -712,8 +719,16 @@ font-family: 'Raleway', sans-serif;
       
       <div>
              <div class="create" id="createSala">
-        <div id="checks">
-         <div style="display:flex; align-items:center;justify-content:space-between;"> <label>N. de jogadores</label>
+               <h2>Criar sala</h2>
+       
+        <div class="inputsCreate">
+          
+           <input type="text" autocomplete="off" class="inpT" name="nomedasala"   placeholder="Nome da Sala"  id="userNameSala">
+        <input type="text" class="inpT"  name="nick" autocomplete="off"    placeholder="Usuario"  id="userNameUs">
+        </div>
+
+                <div id="checks">
+         <div style="display:flex; padding:15px; align-items:center;justify-content:space-between;"> <label>N. de jogadores</label>
       <select id="Idselect" >
         <option value="2">2</option>
         <option value="3">3</option>
@@ -723,7 +738,7 @@ font-family: 'Raleway', sans-serif;
                 <div id="dp1" class="check">
       <div>
          <input type="checkbox" class="checkbox"  id="p1" />
-      <label>Player 1/Criador</label>
+      <label >Player 1/Criador</label>
       </div>
 
             </div>
@@ -753,11 +768,6 @@ font-family: 'Raleway', sans-serif;
           </div>
   
     </div>
-        <div class="inputsCreate">
-          
-           <input type="text" autocomplete="off" class="inpT" name="nomedasala"   placeholder="Nome da Sala"  id="userNameSala">
-        <input type="text" class="inpT"  name="nick" autocomplete="off"    placeholder="Usuario"  id="userNameUs">
-        </div>
          
       </div>
  <div class="divBtn" >
@@ -769,7 +779,7 @@ font-family: 'Raleway', sans-serif;
 
 
       <div>
-              <span onClick="searchRoom()" class="btnSearch">  ↓ Sala criada ↓     </span>
+              <span onClick="searchRoom()" title="Clique aqui para ver salas criadas" class="btnSearch">  ↓ Sala criada ↓     </span>
         
       </div>
       </div>
@@ -1152,9 +1162,27 @@ console.log(value)
    
 });
 
-    socket.on('msg',(req) =>{
-      alert(req)
-    } )
+
+
+
+    socket.on('color',(np)=>{
+      if(np == 1){
+        p1.disabled = true
+        
+      }
+       if(np == 2){
+        p2.disabled = true
+        
+      }
+       if(np == 3){
+        p3.disabled = true
+        
+      }
+    })
+
+  
+
+    
     
     function searchRoom(){
         console.log("procurando....")
@@ -1679,6 +1707,7 @@ console.log(value)
               nameRoomEnter.textContent = showR
       }else{
          nameRoomEnter.textContent = "-"
+        
 
            
       }

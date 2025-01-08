@@ -616,6 +616,21 @@ function nOfUsers() {
 }
 
 io.on('connection', (socket) => {
+
+  if (users.length == 1) {
+    socket.emit('color' ,1)
+  }
+   if (users.length == 2) {
+    socket.emit('color' ,2)
+  }
+   if (users.length == 3) {
+    socket.emit('color' ,3)  
+  }
+  if (users.length == 4) {
+    socket.emit('color' ,4)
+  }
+
+
   io.in(roomName).emit('showPlayersOn', users)
   console.log("Num de users>>>>>>>>>> " + nOfUsers())
 
